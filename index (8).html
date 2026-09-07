@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahdi Hachicha — Embedded Systems &amp; Robotics Engineer</title>
+<meta name="description" content="Portfolio of Mahdi Hachicha — Embedded Systems, IoT &amp; Robotics Engineer. ROS 2, ESP32/STM32 firmware, multi-protocol gateways, founder of PillPal &amp; MiniMakers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board: #0E2A20;
+    --board-dark: #081712;
+    --board-raised: #123528;
+    --silkscreen: #EDEDE3;
+    --silkscreen-dim: #B9C4BB;
+    --copper: #C6793E;
+    --copper-bright: #E2A366;
+    --trace: #2E4A3B;
+    --trace-bright: #3F6650;
+    --signal: #6FE6C6;
+    --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+    --max: 920px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--board);
+    color: var(--silkscreen);
+    font-family: var(--sans);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{ color: var(--copper-bright); text-decoration: none; }
+  a:hover{ color: var(--signal); }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+  ::selection{ background: var(--copper); color: var(--board-dark); }
+
+  .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Header / title block ---------- */
+  header{
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(14,42,32,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--trace);
+  }
+  .headbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 0;
+  }
+  .brand{
+    display:flex; align-items:baseline; gap:10px;
+    font-family: var(--mono); font-size: 14px; color: var(--silkscreen-dim);
+  }
+  .brand strong{
+    font-family: var(--sans); font-weight:600; font-size:16px; color: var(--silkscreen);
+  }
+  nav.mainnav{ display:flex; gap: 28px; }
+  nav.mainnav a{
+    font-family: var(--mono); font-size: 13px; color: var(--silkscreen-dim);
+    position: relative; padding-bottom: 3px;
+  }
+  nav.mainnav a:hover{ color: var(--silkscreen); }
+  nav.mainnav a::after{
+    content:""; position:absolute; left:0; right:0; bottom:-2px; height:2px;
+    background: var(--signal); transform: scaleX(0); transform-origin:left;
+    transition: transform .25s ease;
+  }
+  nav.mainnav a:hover::after{ transform: scaleX(1); }
+  .navtoggle{ display:none; background:none; border:1px solid var(--trace-bright); color: var(--silkscreen); border-radius:4px; padding:8px 10px; font-family:var(--mono); font-size:13px; }
+
+  @media (max-width: 720px){
+    nav.mainnav{
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; gap:0;
+      background: var(--board-raised);
+      border-bottom: 1px solid var(--trace);
+      max-height:0; overflow:hidden;
+      transition: max-height .25s ease;
+    }
+    nav.mainnav.open{ max-height: 260px; }
+    nav.mainnav a{ padding: 14px 24px; border-top:1px solid var(--trace); }
+    .navtoggle{ display:inline-block; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding: 72px 0 56px; }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items:center;
+  }
+  @media (max-width: 800px){ .hero-grid{ grid-template-columns: 1fr; } }
+
+  .kicker{
+    font-family: var(--mono); font-size: 13px; color: var(--signal);
+    display:flex; align-items:center; gap:8px; margin-bottom:18px;
+  }
+  .kicker .dot{ width:7px; height:7px; border-radius:50%; background: var(--signal); box-shadow:0 0 8px var(--signal); animation: blink 2.2s infinite; }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+  h1{
+    font-size: clamp(32px, 5vw, 48px);
+    line-height:1.12; margin: 0 0 18px; font-weight:700; color: var(--silkscreen);
+  }
+  .hero p.lead{
+    font-size:17px; color: var(--silkscreen-dim); max-width: 46ch; margin: 0 0 28px;
+  }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family: var(--mono); font-size: 13px; padding: 12px 20px; border-radius: 5px;
+    border:1px solid var(--copper); color: var(--silkscreen); transition: all .2s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn.primary{ background: var(--copper); color: var(--board-dark); font-weight:600; border-color: var(--copper); }
+  .btn.primary:hover{ background: var(--copper-bright); border-color: var(--copper-bright); color: var(--board-dark); }
+  .btn.ghost:hover{ border-color: var(--signal); color: var(--signal); }
+
+  /* schematic chip diagram */
+  .chip-wrap{ display:flex; justify-content:center; }
+  svg.chip{ width:100%; max-width:380px; height:auto; opacity:0; animation: fadein 1s ease .2s forwards; }
+  @keyframes fadein{ to{ opacity:1; } }
+  .chip-line{ stroke-dasharray: 240; stroke-dashoffset:240; animation: draw 1.4s ease forwards; }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  /* ---------- Sections ---------- */
+  section{ padding: 56px 0; border-top: 1px solid var(--trace); }
+  h2{
+    font-size: 24px; font-weight:600; margin: 0 0 8px; color: var(--silkscreen);
+  }
+  .section-sub{ font-family: var(--mono); font-size:13px; color: var(--silkscreen-dim); margin: 0 0 32px; }
+
+  /* ---------- BOM skills table ---------- */
+  .bom{ width:100%; border-collapse: collapse; font-size:14.5px; }
+  .bom thead th{
+    text-align:left; font-family: var(--mono); font-weight:500; font-size:12px;
+    color: var(--silkscreen-dim); border-bottom:1px solid var(--trace-bright); padding: 0 12px 10px;
+  }
+  .bom td{ padding: 14px 12px; border-bottom:1px solid var(--trace); vertical-align:top; }
+  .bom tr:last-child td{ border-bottom:none; }
+  .bom td.ref{ font-family: var(--mono); color: var(--copper-bright); width:52px; white-space:nowrap; }
+  .bom td.cat{ font-weight:600; width: 190px; }
+  .bom td.val{ color: var(--silkscreen-dim); }
+  @media (max-width:640px){
+    .bom thead{ display:none; }
+    .bom, .bom tbody, .bom tr, .bom td{ display:block; width:100%; }
+    .bom tr{ padding: 14px 0; border-bottom:1px solid var(--trace); }
+    .bom td{ border:none; padding: 2px 0; }
+    .bom td.ref{ font-size:12px; }
+    .bom td.cat{ padding-top:4px; }
+  }
+
+  /* ---------- Projects ---------- */
+  .project{
+    position:relative; padding: 26px 0 26px 34px; border-left: 2px solid var(--trace);
+    margin-left: 6px;
+  }
+  .project:last-child{ padding-bottom: 4px; }
+  .project::before{
+    content:""; position:absolute; left:-7px; top:30px; width:12px; height:12px;
+    border-radius:50%; background: var(--board); border:2px solid var(--copper);
+  }
+  .project-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
+  .sheet-tag{ font-family: var(--mono); font-size:12px; color: var(--copper-bright); }
+  .project h3{ font-size:19px; margin: 4px 0 2px; font-weight:600; }
+  .project .role{ font-family: var(--mono); font-size:12.5px; color: var(--silkscreen-dim); margin-bottom:12px; }
+  .project ul{ margin: 0 0 14px; padding-left: 18px; color: var(--silkscreen-dim); }
+  .project li{ margin-bottom:6px; }
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{
+    font-family: var(--mono); font-size:11.5px; padding: 4px 9px; border-radius:4px;
+    background: var(--board-raised); border:1px solid var(--trace-bright); color: var(--silkscreen-dim);
+  }
+
+  /* ---------- Education ---------- */
+  .edu-item{ margin-bottom: 22px; }
+  .edu-item h3{ font-size:17px; margin:0 0 2px; font-weight:600; }
+  .edu-item .role{ font-family: var(--mono); font-size:12.5px; color: var(--silkscreen-dim); margin-bottom:8px; }
+  .edu-item ul{ margin:0; padding-left:18px; color: var(--silkscreen-dim); }
+
+  /* ---------- Badges (leadership + awards) ---------- */
+  .badge-grid{ display:flex; flex-wrap:wrap; gap:10px; }
+  .badge{
+    font-family: var(--mono); font-size:12.5px; padding: 8px 14px; border-radius:5px;
+    background: var(--board-raised); border:1px solid var(--trace-bright); color: var(--silkscreen-dim);
+  }
+  .badge b{ color: var(--silkscreen); font-weight:600; }
+
+  /* ---------- Contact / title-block footer ---------- */
+  footer{
+    border-top: 1px solid var(--trace); background: var(--board-dark); padding: 44px 0 30px;
+  }
+  .contact-row{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; margin-bottom: 30px;}
+  .contact-row a{ font-family: var(--mono); font-size:14px; }
+  .titleblock{
+    border:1px solid var(--trace-bright); border-radius:6px; padding:16px 20px;
+    display:grid; grid-template-columns: repeat(4, 1fr); gap:14px;
+    font-family: var(--mono); font-size:11.5px; color: var(--silkscreen-dim);
+  }
+  .titleblock div b{ display:block; color: var(--silkscreen); font-size:12.5px; margin-bottom:2px; }
+  @media (max-width:640px){ .titleblock{ grid-template-columns: repeat(2,1fr); } }
+
+  .copyright{ text-align:center; font-family: var(--mono); font-size:11.5px; color: var(--silkscreen-dim); margin-top:26px; opacity:.7; }
+
+  @media (prefers-reduced-motion: reduce){
+    svg.chip, .chip-line, .kicker .dot{ animation: none !important; opacity:1 !important; stroke-dashoffset:0 !important; }
+    html{ scroll-behavior:auto; }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap headbar">
+    <div class="brand"><strong>M. Hachicha</strong>&nbsp;/ portfolio</div>
+    <button class="navtoggle" id="navToggle" aria-expanded="false" aria-controls="mainnav">MENU</button>
+    <nav class="mainnav" id="mainnav">
+      <a href="#profile">Profile</a>
+      <a href="#skills">Skills</a>
+      <a href="#work">Work</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;" id="profile">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker"><span class="dot"></span> AVAILABLE FOR INTERNSHIPS — TUNIS, TN</div>
+        <h1>Mahdi Hachicha<br>Embedded Systems &amp; Robotics Engineer</h1>
+        <p class="lead">I build the layer between hardware and the network — firmware, communication protocols, and the tools to test them. Engineering student at MedTech University; founder of PillPal and MiniMakers.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#work">View projects</a>
+          <a class="btn ghost" href="mailto:mahdi.hachicha@medtech.tn">Get in touch</a>
+          <a class="btn ghost" href="resume.pdf">Download CV</a>
+        </div>
+      </div>
+      <div class="chip-wrap">
+        <svg class="chip" viewBox="0 0 440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="150" y="100" width="140" height="120" rx="6" fill="#123528" stroke="#3F6650" stroke-width="1.5"/>
+          <text x="220" y="155" text-anchor="middle" fill="#EDEDE3" font-family="IBM Plex Mono" font-size="13" font-weight="600">ESP32</text>
+          <text x="220" y="173" text-anchor="middle" fill="#B9C4BB" font-family="IBM Plex Mono" font-size="9">GATEWAY</text>
+          <circle cx="162" cy="112" r="2.5" fill="#C6793E"/>
+
+          <!-- pin lines -->
+          <g stroke="#C6793E" stroke-width="1.4" fill="none">
+            <line class="chip-line" x1="150" y1="115" x2="66" y2="72"/>
+            <line class="chip-line" x1="150" y1="140" x2="52" y2="140"/>
+            <line class="chip-line" x1="150" y1="170" x2="52" y2="186"/>
+            <line class="chip-line" x1="150" y1="205" x2="66" y2="252"/>
+            <line class="chip-line" x1="290" y1="115" x2="374" y2="72"/>
+            <line class="chip-line" x1="290" y1="140" x2="388" y2="140"/>
+            <line class="chip-line" x1="290" y1="170" x2="388" y2="186"/>
+            <line class="chip-line" x1="290" y1="205" x2="374" y2="252"/>
+          </g>
+          <!-- pin labels -->
+          <g font-family="IBM Plex Mono" font-size="12" fill="#EDEDE3">
+            <text x="60" y="67" text-anchor="end">MODBUS</text>
+            <text x="46" y="144" text-anchor="end">WI-FI</text>
+            <text x="46" y="192" text-anchor="end">BLE</text>
+            <text x="60" y="266" text-anchor="end">ESP-NOW</text>
+            <text x="380" y="67">MQTT</text>
+            <text x="394" y="144">GSM</text>
+            <text x="394" y="192">LoRa</text>
+            <text x="380" y="266">CONFIG</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <h2>Skills</h2>
+      <p class="section-sub">Bill of materials — the stack I build with</p>
+      <table class="bom">
+        <thead><tr><th>Ref</th><th>Category</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td class="ref">U1</td><td class="cat">Robotics &amp; Simulation</td><td class="val">ROS 2 (nodes, SLAM, trajectory planning), LiDAR perception, autonomous navigation</td></tr>
+          <tr><td class="ref">U2</td><td class="cat">Embedded &amp; Hardware</td><td class="val">STM32, ESP32, Raspberry Pi 4, Arduino, FPGA (Verilog), PCB Design (Altium)</td></tr>
+          <tr><td class="ref">U3</td><td class="cat">Protocols</td><td class="val">CAN, I2C, SPI, UART, Modbus RTU/TCP, Wi-Fi, Bluetooth, MQTT, LoRa, GSM, ESP-NOW, OBD-II</td></tr>
+          <tr><td class="ref">U4</td><td class="cat">Software &amp; Tools</td><td class="val">ROS 2, MATLAB/Simulink, Fusion 360, Oracle APEX, Git</td></tr>
+          <tr><td class="ref">U5</td><td class="cat">Languages</td><td class="val">C / C++, Python, Java, Verilog</td></tr>
+          <tr><td class="ref">U6</td><td class="cat">Domains</td><td class="val">Embedded systems, autonomous robotics, IoT, automotive diagnostics, embedded AI</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="work">
+    <div class="wrap">
+      <h2>Work</h2>
+      <p class="section-sub">Projects, internships &amp; founding work, most recent first</p>
+
+      <div class="project">
+        <div class="project-head"><span class="sheet-tag">SHEET 01</span></div>
+        <h3>PillPal — Founder &amp; Hardware / 3D Design Lead</h3>
+        <div class="role">Startup · 2026 – Present</div>
+        <ul>
+          <li>Founded PillPal, evolving an award-winning MedTech capstone project (1st place, 2024) into a standalone smart-medication-dispenser company</li>
+          <li>Built the device around an ESP32 paired with a companion app that notifies users and uses AI to detect whether a pill was actually taken</li>
+          <li>Automated dispensing for morning, midday, and night doses across a full week, fully configurable through the app</li>
+          <li>Own hardware architecture and 3D design of the enclosure and dispensing mechanism</li>
+        </ul>
+        <div class="tags"><span class="tag">ESP32</span><span class="tag">Mobile App</span><span class="tag">AI Detection</span><span class="tag">3D Design</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head"><span class="sheet-tag">SHEET 02</span></div>
+        <h3>MiniMakers — Founder</h3>
+        <div class="role">Robotics School for Ages 9–15 · Tunis, Tunisia · 2025 – Present</div>
+        <ul>
+          <li>Founded a robotics education program for kids and teenagers</li>
+          <li>Taught 30+ students during a summer program covering Arduino programming and hands-on robotics</li>
+          <li>Designed and led a flagship build: a four-wheel autonomous car with obstacle detection</li>
+        </ul>
+        <div class="tags"><span class="tag">Arduino</span><span class="tag">Robotics Education</span><span class="tag">Curriculum Design</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head"><span class="sheet-tag">SHEET 03</span></div>
+        <h3>Multi-Protocol IoT Gateway — Summer Internship, Tekkim</h3>
+        <div class="role">Embedded Systems Internship · Tunis, Tunisia · June – July 2026</div>
+        <ul>
+          <li>Designed a multi-protocol gateway on ESP32 bridging Modbus RTU/TCP, Wi-Fi, Bluetooth, MQTT, GSM, LoRa, and ESP-NOW</li>
+          <li>Built an embedded web interface hosted directly on the ESP32 for on-device configuration</li>
+          <li>Developed a Python application to simulate and monitor Modbus registers for end-to-end testing without physical field devices</li>
+        </ul>
+        <div class="tags"><span class="tag">ESP32</span><span class="tag">Modbus</span><span class="tag">MQTT</span><span class="tag">LoRa</span><span class="tag">GSM</span><span class="tag">Python</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head"><span class="sheet-tag">SHEET 04</span></div>
+        <h3>Automotive Diagnostic System — Bako Motors</h3>
+        <div class="role">Technical Project · 2025</div>
+        <ul>
+          <li>Designed an embedded vehicle diagnostic system based on the CAN bus protocol</li>
+          <li>Built a cloud-connected Python interface for real-time OBD-II monitoring and diagnostics</li>
+          <li>Integrated alerts and visualizations to support fault detection and preventive maintenance</li>
+        </ul>
+        <div class="tags"><span class="tag">CAN Bus</span><span class="tag">OBD-II</span><span class="tag">Python</span><span class="tag">Cloud Dashboard</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head"><span class="sheet-tag">SHEET 05</span></div>
+        <h3>Autonomous Vehicle — Research Internship, MedTech SmartLab</h3>
+        <div class="role">Research Internship · 2024</div>
+        <ul>
+          <li>Developed a complete autonomous vehicle under ROS 2 with LiDAR perception and navigation in a controlled environment</li>
+          <li>Worked across the ROS 2 architecture: inter-node communication, sensor management, SLAM, trajectory planning</li>
+          <li>Validated the system on a real course with an obstacle detection rate above 95%</li>
+        </ul>
+        <div class="tags"><span class="tag">ROS 2</span><span class="tag">LiDAR</span><span class="tag">SLAM</span><span class="tag">Raspberry Pi 4</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head"><span class="sheet-tag">SHEET 06</span></div>
+        <h3>Banking Declarations Dashboard — SmartSystem Tunisia</h3>
+        <div class="role">Professional Internship · 2023</div>
+        <ul>
+          <li>Built an interactive interface for managing and digitalizing banking declaration forms</li>
+          <li>Deployed to production for internal use by the Central Bank of Tunisia</li>
+        </ul>
+        <div class="tags"><span class="tag">Oracle APEX</span><span class="tag">Digitalization</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="wrap">
+      <h2>Education</h2>
+      <p class="section-sub"></p>
+      <div class="edu-item">
+        <h3>Engineering Degree in Computer Systems</h3>
+        <div class="role">MedTech University — Tunis, Tunisia · 2024 – Present</div>
+        <ul>
+          <li>Specialization: Embedded Systems, Networks, IoT, Robotics &amp; Low-Level Programming</li>
+        </ul>
+      </div>
+      <div class="edu-item">
+        <h3>Integrated Preparatory Classes (MPI)</h3>
+        <div class="role">MedTech University — Tunis, Tunisia · 2022 – 2024</div>
+        <ul>
+          <li>Intensive training in Mathematics, Physics, Computer Science &amp; Engineering Sciences</li>
+        </ul>
+      </div>
+
+      <h2 style="margin-top:40px;">Leadership &amp; Awards</h2>
+      <div class="badge-grid">
+        <span class="badge"><b>IEEE-HKN</b> Nu Tau Chapter, Member — since Jan 2026</span>
+        <span class="badge"><b>IEEE SMU</b> Student Branch Treasurer — 2024</span>
+        <span class="badge"><b>IEEE SMU RAS</b> Treasurer — 2023</span>
+        <span class="badge">🏆 Best MedTech Project — 2025</span>
+        <span class="badge">🏆 Best MedTech Project — 2024</span>
+        <span class="badge">🥈 TechRevive 2.0 — 2025</span>
+        <span class="badge">🥉 SMU AI Hackathon — 2025</span>
+        <span class="badge">Certified — Altium Designer</span>
+        <span class="badge">Certified — ROS 2</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2 style="margin-bottom:6px;">Contact</h2>
+    <p class="section-sub" style="margin-bottom:24px;">Open to embedded systems, IoT and robotics internships</p>
+    <div class="contact-row">
+      <a href="mailto:mahdi.hachicha@medtech.tn">mahdi.hachicha@medtech.tn</a>
+      <a href="tel:+21693185425">+216 93 185 425</a>
+      <a href="https://linkedin.com/in/mahdi-hachicha" target="_blank" rel="noopener">linkedin.com/in/mahdi-hachicha</a>
+    </div>
+    <div class="titleblock">
+      <div><b>DESIGNED BY</b>Mahdi Hachicha</div>
+      <div><b>LOCATION</b>Tunis, Tunisia</div>
+      <div><b>REV</b>2026.09</div>
+      <div><b>STATUS</b>Open to internships</div>
+    </div>
+    <div class="copyright">© 2026 Mahdi Hachicha. Built &amp; hosted on GitHub Pages.</div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('mainnav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  }));
+</script>
+
+</body>
+</html>

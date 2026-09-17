@@ -76,7 +76,7 @@
     border:1px solid var(--border); overflow:hidden; }
   .img-slot img{ width:100%; height:100%; object-fit:cover; display:block; }
   .img-slot .ph{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
     flex-direction:column; gap:6px; text-align:center; padding:10px;
     background:
       linear-gradient(var(--border) 1px, transparent 1px) 0 0/14px 14px,
@@ -87,11 +87,11 @@
 
   /* ---------- Hero ---------- */
   .hero{ padding: 88px 0 64px; border-bottom: 1px solid var(--border); }
-  .hero-grid{ display:grid; grid-template-columns: 1fr 220px; gap: 48px; align-items:center; }
+  .hero-grid{ display:grid; grid-template-columns: 1fr 300px; gap: 48px; align-items:center; }
   @media (max-width: 720px){ .hero-grid{ grid-template-columns: 1fr; } }
-  .hero-photo{ width:220px; height:220px; border-radius:6px; }
+  .hero-photo{ width:300px; height:300px; border-radius:6px; }
   .hero-photo .ph span{ font-size:11px; }
-  @media (max-width:720px){ .hero-photo{ width:140px; height:140px; order:-1; } }
+  @media (max-width:720px){ .hero-photo{ width:220px; height:220px; order:-1; } }
   .eyebrow{
     font-size: 13px; color: var(--accent); font-weight:600; letter-spacing:.02em;
     display:flex; align-items:center; gap:8px; margin-bottom:22px;
@@ -161,7 +161,7 @@
   }
   .project-carousel::-webkit-scrollbar{ display:none; }
   .carousel-item{ flex:0 0 calc((100% - 20px)/3); scroll-snap-align:start; }
-  .carousel-item .img-slot{ aspect-ratio:4/3; border-radius:6px; }
+  .carousel-item .img-slot{ aspect-ratio:3/2; border-radius:6px; }
   @media (max-width:640px){ .carousel-item{ flex:0 0 68%; } }
   .car-btn{
     position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:50%;
@@ -193,8 +193,8 @@
   .marquee-track{ display:flex; gap:16px; width:max-content; padding: 0 28px; animation: scroll-x 32s linear infinite; }
   .marquee:hover .marquee-track{ animation-play-state: paused; }
   @keyframes scroll-x{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
-  .cert-card{ width:200px; flex:0 0 auto; }
-  .cert-card .img-slot{ aspect-ratio: 4/3; border-radius:6px; }
+  .cert-card{ width:240px; flex:0 0 auto; }
+  .cert-card .img-slot{ aspect-ratio: 3/2; border-radius:6px; }
   .cert-card .cap{ font-size:12.5px; color: var(--steel); margin-top:8px; text-align:center; }
   @media (prefers-reduced-motion: reduce){ .marquee-track{ animation:none; } }
 
@@ -245,7 +245,7 @@
 <main>
   <!-- HERO -->
   <section class="hero" id="profile">
-    
+    <div class="wrap hero-grid">
       <div>
         <div class="eyebrow"><span class="dot"></span> Available for internships — Tunis, Tunisia</div>
         <h1>Embedded Systems &amp; Robotics Engineer</h1>
@@ -262,6 +262,7 @@
           <div class="ph"><span>images/profile.jpg</span></div>
         </div>
       </div>
+    </div>
   </section>
 
   <!-- SKILLS -->
@@ -270,7 +271,7 @@
       <div class="section-head">
         <span class="num">01</span>
         <h2>Skills</h2>
-        <p class="section-sub">The stacks I build with, organized like a bill of materials</p>
+        <p class="section-sub">The stack I build with, organized like a bill of materials</p>
       </div>
       <table class="bom">
         <thead><tr><th>Ref</th><th>Category</th><th>Value</th></tr></thead>
@@ -387,9 +388,9 @@
           <div class="project-carousel" id="car-bako">
             <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-1.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-1.jpg</span></div></div></div>
             <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-2.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="https://github.com/mahdihachicha03/Portfolio/blob/main/images/projects/bako-3.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="C:/Users/mhach/Desktop/Professionnel_docs/Portfolio/images/projects/bako-1.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="/images/projects/bako-5.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-5.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-3.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-4.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-5.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-5.jpg</span></div></div></div>
           </div>
           <button class="car-btn prev" data-target="car-bako" aria-label="Previous photos">&#8592;</button>
           <button class="car-btn next" data-target="car-bako" aria-label="Next photos">&#8594;</button>
@@ -434,19 +435,36 @@
       <div class="project">
         <div class="project-head">
           <span class="sheet-tag">Sheet 06</span>
-          <h3>Banking Declarations Dashboard — SmartSystem Tunisia</h3>
-          <div class="role">Professional Internship · 2023</div>
+          <h3>ShopMate — Smart Autonomous Shopping Cart</h3>
+          <div class="role">Technical Project · January – May 2025</div>
         </div>
         <div class="carousel-wrap">
-          <div class="project-carousel" id="car-smartsystem">
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-1.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-1.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-2.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-3.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-4.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-5.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-5.jpg</span></div></div></div>
+          <div class="project-carousel" id="car-shopmate">
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-1.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-1.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-2.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-2.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-3.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-4.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-5.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-5.jpg</span></div></div></div>
           </div>
-          <button class="car-btn prev" data-target="car-smartsystem" aria-label="Previous photos">&#8592;</button>
-          <button class="car-btn next" data-target="car-smartsystem" aria-label="Next photos">&#8594;</button>
+          <button class="car-btn prev" data-target="car-shopmate" aria-label="Previous photos">&#8592;</button>
+          <button class="car-btn next" data-target="car-shopmate" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
+          <ul>
+            <li>Designed an autonomous smart shopping cart that follows the shopper through the store</li>
+            <li>Implemented RFID-based product scanning for automatic item detection and checkout</li>
+            <li>Built a custom PCB to integrate and power all onboard sensors and modules</li>
+            <li>Combined follow-me navigation, RFID scanning, and sensor management into a single cohesive system</li>
+          </ul>
+          <div class="tags"><span class="tag">RFID</span><span class="tag">Custom PCB</span><span class="tag">Sensors</span><span class="tag">Autonomous Navigation</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <span class="sheet-tag">Sheet 07</span>
+          <h3>Banking Declarations Dashboard — SmartSystem Tunisia</h3>
+          <div class="role">Professional Internship · 2023</div>
         </div>
         <div class="project-body">
           <ul>
@@ -518,8 +536,6 @@
         <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-4.jpg" alt="Certificate 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-4.jpg</span></div></div><div class="cap">Best Year-End Project — 2025</div></div>
         <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-5.jpg" alt="Certificate 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-5.jpg</span></div></div><div class="cap">Best Year-End Project — 2024</div></div>
         <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-6.jpg" alt="Certificate 6" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-6.jpg</span></div></div><div class="cap">2nd Place — TechRevive 2.0, 2025</div></div>
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-7.jpg" alt="Certificate 7" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-7.jpg</span></div></div><div class="cap">3rd Place — SMU AI Hackathon, 2025</div></div>
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-8.jpg" alt="Certificate 8" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-8.jpg</span></div></div><div class="cap">IEEE-HKN Membership</div></div>
         <!-- Set 2 (duplicate for seamless loop, keep in sync with Set 1) -->
         <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-1.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-1.jpg</span></div></div><div class="cap">Altium Designer — PCB Design</div></div>
         <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-2.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-2.jpg</span></div></div><div class="cap">ROS 2 Certification</div></div>
@@ -527,8 +543,6 @@
         <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-4.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-4.jpg</span></div></div><div class="cap">Best Year-End Project — 2025</div></div>
         <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-5.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-5.jpg</span></div></div><div class="cap">Best Year-End Project — 2024</div></div>
         <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-6.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-6.jpg</span></div></div><div class="cap">2nd Place — TechRevive 2.0, 2025</div></div>
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-7.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-7.jpg</span></div></div><div class="cap">3rd Place — SMU AI Hackathon, 2025</div></div>
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-8.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-8.jpg</span></div></div><div class="cap">IEEE-HKN Membership</div></div>
       </div>
     </div>
   </section>

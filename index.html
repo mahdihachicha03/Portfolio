@@ -71,8 +71,27 @@
     .navtoggle{ display:inline-block; }
   }
 
+  /* ---------- Image placeholder (shared) ---------- */
+  .img-slot{ position:relative; width:100%; height:100%; background: var(--panel);
+    border:1px solid var(--border); overflow:hidden; }
+  .img-slot img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .img-slot .ph{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:6px; text-align:center; padding:10px;
+    background:
+      linear-gradient(var(--border) 1px, transparent 1px) 0 0/14px 14px,
+      linear-gradient(90deg, var(--border) 1px, transparent 1px) 0 0/14px 14px,
+      var(--panel);
+  }
+  .img-slot .ph span{ font-family: var(--mono); font-size:11px; color: var(--steel-light); line-height:1.5; word-break:break-all; }
+
   /* ---------- Hero ---------- */
   .hero{ padding: 88px 0 64px; border-bottom: 1px solid var(--border); }
+  .hero-grid{ display:grid; grid-template-columns: 1fr 220px; gap: 48px; align-items:center; }
+  @media (max-width: 720px){ .hero-grid{ grid-template-columns: 1fr; } }
+  .hero-photo{ width:220px; height:220px; border-radius:6px; }
+  .hero-photo .ph span{ font-size:11px; }
+  @media (max-width:720px){ .hero-photo{ width:140px; height:140px; order:-1; } }
   .eyebrow{
     font-size: 13px; color: var(--accent); font-weight:600; letter-spacing:.02em;
     display:flex; align-items:center; gap:8px; margin-bottom:22px;
@@ -124,30 +143,36 @@
 
   /* ---------- Projects ---------- */
   .project{
-    display:grid; grid-template-columns: 260px 1fr; gap: 32px;
     padding: 36px 0; border-bottom: 1px solid var(--border);
   }
   .project:last-child{ border-bottom:none; padding-bottom:0; }
   .project:first-child{ padding-top:0; }
-  @media (max-width: 720px){ .project{ grid-template-columns: 1fr; } }
 
-  .project-media{
-    aspect-ratio: 4/3; border-radius:6px; overflow:hidden; background: var(--panel);
-    border: 1px solid var(--border); position:relative;
-  }
-  .project-media img{ width:100%; height:100%; object-fit:cover; }
-  .project-media.placeholder{
-    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;
-    background:
-      linear-gradient(var(--border) 1px, transparent 1px) 0 0/16px 16px,
-      linear-gradient(90deg, var(--border) 1px, transparent 1px) 0 0/16px 16px,
-      var(--panel);
-  }
-  .project-media.placeholder span{ font-size:12px; color: var(--steel-light); text-align:center; padding:0 16px; }
+  .project-head{ margin-bottom: 18px; }
+  .project-head .sheet-tag{ font-family: var(--mono); font-size:12px; color: var(--steel-light); display:block; margin-bottom:6px; }
+  .project-head h3{ font-family: var(--serif); font-size:21px; margin: 0 0 4px; font-weight:600; color: var(--navy); }
+  .project-head .role{ font-size:13.5px; color: var(--steel); }
 
-  .project-body .sheet-tag{ font-family: var(--mono); font-size:12px; color: var(--steel-light); display:block; margin-bottom:6px; }
-  .project-body h3{ font-family: var(--serif); font-size:21px; margin: 0 0 4px; font-weight:600; color: var(--navy); }
-  .project-body .role{ font-size:13.5px; color: var(--steel); margin-bottom:14px; }
+  /* Carousel: 3 photos visible, scroll for more */
+  .carousel-wrap{ position:relative; margin-bottom:20px; }
+  .project-carousel{
+    display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  .project-carousel::-webkit-scrollbar{ display:none; }
+  .carousel-item{ flex:0 0 calc((100% - 20px)/3); scroll-snap-align:start; }
+  .carousel-item .img-slot{ aspect-ratio:4/3; border-radius:6px; }
+  @media (max-width:640px){ .carousel-item{ flex:0 0 68%; } }
+  .car-btn{
+    position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:50%;
+    background:var(--panel); border:1px solid var(--border); color:var(--navy); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(15,42,74,.14);
+    font-size:15px; line-height:1; padding:0; z-index:2; transition: background .15s ease, color .15s ease;
+  }
+  .car-btn:hover{ background: var(--navy); color:#fff; border-color:var(--navy); }
+  .car-btn.prev{ left:-15px; } .car-btn.next{ right:-15px; }
+  @media (max-width:640px){ .car-btn{ display:none; } }
+
   .project-body ul{ margin: 0 0 16px; padding-left: 18px; color: var(--text); }
   .project-body li{ margin-bottom:7px; font-size:15px; }
   .tags{ display:flex; flex-wrap:wrap; gap:8px; }
@@ -161,6 +186,17 @@
   .edu-item h3{ font-family: var(--serif); font-size:18px; margin:0 0 3px; font-weight:600; color: var(--navy); }
   .edu-item .role{ font-size:13.5px; color: var(--steel); margin-bottom:8px; }
   .edu-item ul{ margin:0; padding-left:18px; color: var(--text); font-size:15px; }
+
+  /* ---------- Certificate marquee ---------- */
+  .marquee{ overflow:hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent); }
+  .marquee-track{ display:flex; gap:16px; width:max-content; padding: 0 28px; animation: scroll-x 32s linear infinite; }
+  .marquee:hover .marquee-track{ animation-play-state: paused; }
+  @keyframes scroll-x{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+  .cert-card{ width:200px; flex:0 0 auto; }
+  .cert-card .img-slot{ aspect-ratio: 4/3; border-radius:6px; }
+  .cert-card .cap{ font-size:12.5px; color: var(--steel); margin-top:8px; text-align:center; }
+  @media (prefers-reduced-motion: reduce){ .marquee-track{ animation:none; } }
 
   /* ---------- Badges ---------- */
   .badge-grid{ display:flex; flex-wrap:wrap; gap:10px; }
@@ -200,6 +236,7 @@
       <a href="#skills">Skills</a>
       <a href="#work">Work</a>
       <a href="#education">Education</a>
+      <a href="#gallery">Certificates</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -208,14 +245,22 @@
 <main>
   <!-- HERO -->
   <section class="hero" id="profile">
-    <div class="wrap">
-      <div class="eyebrow"><span class="dot"></span> Available for internships — Tunis, Tunisia</div>
-      <h1>Embedded Systems &amp; Robotics Engineer</h1>
-      <p class="lead">I build the layer between hardware and the network — firmware, communication protocols, and the tools to test them. Engineering student at MedTech University; founder of PillPal and MiniMakers.</p>
-      <div class="cta-row">
-        <a class="btn primary" href="#work">View projects</a>
-        <a class="btn ghost" href="mailto:mahdi.hachicha@medtech.tn">Get in touch</a>
-        <a class="btn ghost" href="resume.pdf" download>Download CV</a>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Available for internships — Tunis, Tunisia</div>
+        <h1>Embedded Systems &amp; Robotics Engineer</h1>
+        <p class="lead">I build the layer between hardware and the network — firmware, communication protocols, and the tools to test them. Engineering student at MedTech University; founder of PillPal and MiniMakers.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#work">View projects</a>
+          <a class="btn ghost" href="mailto:mahdi.hachicha@medtech.tn">Get in touch</a>
+          <a class="btn ghost" href="resume.pdf" download>Download CV</a>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <div class="img-slot">
+          <img src="images/profile.jpg" alt="Mahdi Hachicha" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="ph"><span>images/profile.jpg</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -252,13 +297,23 @@
       </div>
 
       <div class="project">
-        <div class="project-media placeholder" data-project="pillpal">
-          <span>Add photo:<br>PillPal prototype / app</span>
-        </div>
-        <div class="project-body">
+        <div class="project-head">
           <span class="sheet-tag">Sheet 01</span>
           <h3>PillPal — Founder &amp; Hardware / 3D Design Lead</h3>
           <div class="role">Startup · 2026 – Present</div>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" id="car-pillpal">
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-1.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-1.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-2.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-2.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-3.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-4.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-5.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-5.jpg</span></div></div></div>
+          </div>
+          <button class="car-btn prev" data-target="car-pillpal" aria-label="Previous photos">&#8592;</button>
+          <button class="car-btn next" data-target="car-pillpal" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
           <ul>
             <li>Founded PillPal, evolving an award-winning MedTech capstone project (1st place, 2024) into a standalone smart-medication-dispenser company</li>
             <li>Built the device around an ESP32 paired with a companion app that notifies users and uses AI to detect whether a pill was actually taken</li>
@@ -270,13 +325,23 @@
       </div>
 
       <div class="project">
-        <div class="project-media placeholder" data-project="minimakers">
-          <span>Add photo:<br>MiniMakers class / robot build</span>
-        </div>
-        <div class="project-body">
+        <div class="project-head">
           <span class="sheet-tag">Sheet 02</span>
           <h3>MiniMakers — Founder</h3>
           <div class="role">Robotics School for Ages 9–15 · Tunis, Tunisia · 2025 – Present</div>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" id="car-minimakers">
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-1.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-1.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-2.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-2.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-3.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-4.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-5.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-5.jpg</span></div></div></div>
+          </div>
+          <button class="car-btn prev" data-target="car-minimakers" aria-label="Previous photos">&#8592;</button>
+          <button class="car-btn next" data-target="car-minimakers" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
           <ul>
             <li>Founded a robotics education program for kids and teenagers</li>
             <li>Taught 30+ students during a summer program covering Arduino programming and hands-on robotics</li>
@@ -287,13 +352,23 @@
       </div>
 
       <div class="project">
-        <div class="project-media placeholder" data-project="tekkim">
-          <span>Add photo:<br>ESP32 gateway hardware</span>
-        </div>
-        <div class="project-body">
+        <div class="project-head">
           <span class="sheet-tag">Sheet 03</span>
           <h3>Multi-Protocol IoT Gateway — Summer Internship, Tekkim</h3>
           <div class="role">Embedded Systems Internship · Tunis, Tunisia · June – July 2026</div>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" id="car-tekkim">
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-1.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-1.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-2.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-2.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-3.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-4.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-5.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-5.jpg</span></div></div></div>
+          </div>
+          <button class="car-btn prev" data-target="car-tekkim" aria-label="Previous photos">&#8592;</button>
+          <button class="car-btn next" data-target="car-tekkim" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
           <ul>
             <li>Designed a multi-protocol gateway on ESP32 bridging Modbus RTU/TCP, Wi-Fi, Bluetooth, MQTT, GSM, LoRa, and ESP-NOW</li>
             <li>Built an embedded web interface hosted directly on the ESP32 for on-device configuration</li>
@@ -304,13 +379,23 @@
       </div>
 
       <div class="project">
-        <div class="project-media placeholder" data-project="bako">
-          <span>Add photo:<br>Diagnostic dashboard / CAN setup</span>
-        </div>
-        <div class="project-body">
+        <div class="project-head">
           <span class="sheet-tag">Sheet 04</span>
           <h3>Automotive Diagnostic System — Bako Motors</h3>
           <div class="role">Technical Project · 2025</div>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" id="car-bako">
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-1.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-1.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-2.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-2.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-3.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-4.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-5.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-5.jpg</span></div></div></div>
+          </div>
+          <button class="car-btn prev" data-target="car-bako" aria-label="Previous photos">&#8592;</button>
+          <button class="car-btn next" data-target="car-bako" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
           <ul>
             <li>Designed an embedded vehicle diagnostic system based on the CAN bus protocol</li>
             <li>Built a cloud-connected Python interface for real-time OBD-II monitoring and diagnostics</li>
@@ -321,13 +406,23 @@
       </div>
 
       <div class="project">
-        <div class="project-media placeholder" data-project="smartlab">
-          <span>Add photo:<br>Autonomous vehicle</span>
-        </div>
-        <div class="project-body">
+        <div class="project-head">
           <span class="sheet-tag">Sheet 05</span>
           <h3>Autonomous Vehicle — Research Internship, MedTech SmartLab</h3>
           <div class="role">Research Internship · 2024</div>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" id="car-smartlab">
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-1.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-1.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-2.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-2.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-3.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-4.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-5.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-5.jpg</span></div></div></div>
+          </div>
+          <button class="car-btn prev" data-target="car-smartlab" aria-label="Previous photos">&#8592;</button>
+          <button class="car-btn next" data-target="car-smartlab" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
           <ul>
             <li>Developed a complete autonomous vehicle under ROS 2 with LiDAR perception and navigation in a controlled environment</li>
             <li>Worked across the ROS 2 architecture: inter-node communication, sensor management, SLAM, trajectory planning</li>
@@ -338,13 +433,23 @@
       </div>
 
       <div class="project">
-        <div class="project-media placeholder" data-project="smartsystem">
-          <span>Add photo:<br>Dashboard screenshot</span>
-        </div>
-        <div class="project-body">
+        <div class="project-head">
           <span class="sheet-tag">Sheet 06</span>
           <h3>Banking Declarations Dashboard — SmartSystem Tunisia</h3>
           <div class="role">Professional Internship · 2023</div>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" id="car-smartsystem">
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-1.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-1.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-2.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-2.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-3.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-3.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-4.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-4.jpg</span></div></div></div>
+            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartsystem-5.jpg" alt="Banking declarations dashboard" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartsystem-5.jpg</span></div></div></div>
+          </div>
+          <button class="car-btn prev" data-target="car-smartsystem" aria-label="Previous photos">&#8592;</button>
+          <button class="car-btn next" data-target="car-smartsystem" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
           <ul>
             <li>Built an interactive interface for managing and digitalizing banking declaration forms</li>
             <li>Deployed to production for internal use by the Central Bank of Tunisia</li>
@@ -395,6 +500,39 @@
       </div>
     </div>
   </section>
+
+  <!-- CERTIFICATES / ACHIEVEMENTS GALLERY -->
+  <section id="gallery">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="num">05</span>
+        <h2>Certificates &amp; Achievements</h2>
+        <p class="section-sub">Hover to pause</p>
+      </div>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track">
+        <!-- Set 1 -->
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-1.jpg" alt="Certificate 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-1.jpg</span></div></div><div class="cap">Altium Designer — PCB Design</div></div>
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-2.jpg" alt="Certificate 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-2.jpg</span></div></div><div class="cap">ROS 2 Certification</div></div>
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-3.jpg" alt="Certificate 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-3.jpg</span></div></div><div class="cap">Best Year-End Project — 2026</div></div>
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-4.jpg" alt="Certificate 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-4.jpg</span></div></div><div class="cap">Best Year-End Project — 2025</div></div>
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-5.jpg" alt="Certificate 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-5.jpg</span></div></div><div class="cap">Best Year-End Project — 2024</div></div>
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-6.jpg" alt="Certificate 6" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-6.jpg</span></div></div><div class="cap">2nd Place — TechRevive 2.0, 2025</div></div>
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-7.jpg" alt="Certificate 7" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-7.jpg</span></div></div><div class="cap">3rd Place — SMU AI Hackathon, 2025</div></div>
+        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-8.jpg" alt="Certificate 8" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-8.jpg</span></div></div><div class="cap">IEEE-HKN Membership</div></div>
+        <!-- Set 2 (duplicate for seamless loop, keep in sync with Set 1) -->
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-1.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-1.jpg</span></div></div><div class="cap">Altium Designer — PCB Design</div></div>
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-2.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-2.jpg</span></div></div><div class="cap">ROS 2 Certification</div></div>
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-3.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-3.jpg</span></div></div><div class="cap">Best Year-End Project — 2026</div></div>
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-4.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-4.jpg</span></div></div><div class="cap">Best Year-End Project — 2025</div></div>
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-5.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-5.jpg</span></div></div><div class="cap">Best Year-End Project — 2024</div></div>
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-6.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-6.jpg</span></div></div><div class="cap">2nd Place — TechRevive 2.0, 2025</div></div>
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-7.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-7.jpg</span></div></div><div class="cap">3rd Place — SMU AI Hackathon, 2025</div></div>
+        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-8.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-8.jpg</span></div></div><div class="cap">IEEE-HKN Membership</div></div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer id="contact">
@@ -430,6 +568,17 @@
     nav.classList.remove('open');
     toggle.setAttribute('aria-expanded', false);
   }));
+
+  // Project photo carousels
+  document.querySelectorAll('.car-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const track = document.getElementById(btn.dataset.target);
+      const item = track.querySelector('.carousel-item');
+      if (!item) return;
+      const amount = item.getBoundingClientRect().width + 10;
+      track.scrollBy({ left: btn.classList.contains('next') ? amount : -amount, behavior: 'smooth' });
+    });
+  });
 </script>
 
 </body>

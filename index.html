@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mahdi Hachicha — Embedded Systems &amp; Robotics Engineer</title>
 <meta name="description" content="Portfolio of Mahdi Hachicha — Embedded Systems, IoT &amp; Robotics Engineer. ROS 2, ESP32/STM32 firmware, multi-protocol gateways, founder of PillPal &amp; MiniMakers.">
+<meta name="author" content="Mahdi Hachicha">
+<meta name="theme-color" content="#0F2A4A">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mahdi Hachicha — Embedded Systems &amp; Robotics Engineer">
+<meta property="og:description" content="Firmware, communication protocols and robotics. Founder of PillPal and MiniMakers.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230F2A4A'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' font-weight='600' fill='white' text-anchor='middle'%3EMH%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,10 +29,15 @@
     --serif: 'Newsreader', Georgia, serif;
     --sans: 'Inter', -apple-system, sans-serif;
     --mono: 'IBM Plex Mono', 'SF Mono', monospace;
-    --max: 980px;
+    --max: 1040px;
+    --radius: 8px;
+    --shadow-sm: 0 1px 2px rgba(15,42,74,.05), 0 2px 8px rgba(15,42,74,.05);
+    --shadow-md: 0 4px 12px rgba(15,42,74,.08), 0 12px 32px rgba(15,42,74,.08);
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --header-h: 64px;
   }
   *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
+  html{ scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 12px); }
   body{
     margin:0;
     background: var(--bg);
@@ -34,185 +45,344 @@
     font-family: var(--sans);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  a{ color: var(--accent); text-decoration: none; }
+  body.lb-open{ overflow:hidden; }
+  a{ color: var(--accent); text-decoration: none; transition: color .15s ease; }
   a:hover{ color: var(--accent-bright); }
-  a:focus-visible, button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
   ::selection{ background: var(--navy); color: #fff; }
   img{ max-width:100%; display:block; }
+  button{ font: inherit; }
 
   .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+  @media (max-width: 480px){ .wrap{ padding: 0 18px; } }
+
+  .skip{ position:absolute; left:-9999px; top:8px; background:var(--navy); color:#fff; padding:8px 14px; border-radius:4px; z-index:100; }
+  .skip:focus{ left:12px; color:#fff; }
 
   /* ---------- Header ---------- */
   header{
     position: sticky; top: 0; z-index: 40;
-    background: rgba(246,247,249,0.9);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
+    background: rgba(246,247,249,0.85);
+    backdrop-filter: saturate(180%) blur(10px);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease, box-shadow .2s ease;
   }
-  .headbar{ display:flex; align-items:center; justify-content:space-between; padding: 18px 0; }
-  .brand{ font-family: var(--serif); font-size: 18px; font-weight:600; color: var(--navy); }
-  nav.mainnav{ display:flex; gap: 32px; }
-  nav.mainnav a{ font-size: 14px; color: var(--steel); font-weight:500; }
+  header.scrolled{ border-bottom-color: var(--border); box-shadow: 0 2px 12px rgba(15,42,74,.06); }
+  .headbar{ display:flex; align-items:center; justify-content:space-between; height: var(--header-h); }
+  .brand{ font-family: var(--serif); font-size: 19px; font-weight:600; color: var(--navy); letter-spacing:-.01em; }
+  .brand:hover{ color: var(--navy); }
+  nav.mainnav{ display:flex; gap: 6px; }
+  nav.mainnav a{
+    position:relative; font-size: 14px; color: var(--steel); font-weight:500;
+    padding: 8px 12px; border-radius: 6px;
+  }
+  nav.mainnav a::after{
+    content:""; position:absolute; left:12px; right:12px; bottom:2px; height:2px; border-radius:2px;
+    background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease);
+  }
   nav.mainnav a:hover{ color: var(--navy); }
-  .navtoggle{ display:none; background:none; border:1px solid var(--border); color: var(--navy); border-radius:4px; padding:8px 12px; font-size:13px; font-family:var(--sans); }
+  nav.mainnav a.active{ color: var(--navy); }
+  nav.mainnav a.active::after{ transform: scaleX(1); }
+  .navtoggle{
+    display:none; background:var(--panel); border:1px solid var(--border); color: var(--navy);
+    border-radius:6px; padding:8px 12px; font-size:13px; font-weight:500; cursor:pointer;
+  }
 
-  @media (max-width: 720px){
+  @media (max-width: 760px){
     nav.mainnav{
       position:absolute; top:100%; left:0; right:0;
       flex-direction:column; gap:0;
       background: var(--panel);
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 12px 24px rgba(15,42,74,.08);
       max-height:0; overflow:hidden;
-      transition: max-height .25s ease;
+      transition: max-height .3s var(--ease);
     }
-    nav.mainnav.open{ max-height: 300px; }
-    nav.mainnav a{ padding: 14px 28px; border-top:1px solid var(--border); }
+    nav.mainnav.open{ max-height: 360px; }
+    nav.mainnav a{ padding: 14px 28px; border-top:1px solid var(--border); border-radius:0; }
+    nav.mainnav a::after{ display:none; }
+    nav.mainnav a.active{ background: var(--bg); }
     .navtoggle{ display:inline-block; }
   }
 
-  /* ---------- Image placeholder (shared) ---------- */
-  .img-slot{ position:relative; width:100%; height:100%; background: var(--panel);
-    border:1px solid var(--border); overflow:hidden; }
-  .img-slot img{ width:100%; height:100%; object-fit:cover; display:block; }
-  .img-slot .ph{
-    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
-    flex-direction:column; gap:6px; text-align:center; padding:10px;
+  /* ---------- Hero ---------- */
+  .hero{ padding: 88px 0 72px; border-bottom: 1px solid var(--border); }
+  .hero-grid{ display:grid; grid-template-columns: 1fr 320px; gap: 56px; align-items:center; }
+  .hero-photo{ position:relative; width:320px; aspect-ratio:1; }
+  .hero-photo::before{
+    content:""; position:absolute; inset: 14px -14px -14px 14px; border-radius: 12px;
+    border: 1px solid var(--border);
     background:
       linear-gradient(var(--border) 1px, transparent 1px) 0 0/14px 14px,
-      linear-gradient(90deg, var(--border) 1px, transparent 1px) 0 0/14px 14px,
-      var(--panel);
+      linear-gradient(90deg, var(--border) 1px, transparent 1px) 0 0/14px 14px;
   }
-  .img-slot .ph span{ font-family: var(--mono); font-size:11px; color: var(--steel-light); line-height:1.5; word-break:break-all; }
-
-  /* ---------- Hero ---------- */
-  .hero{ padding: 88px 0 64px; border-bottom: 1px solid var(--border); }
-  .hero-grid{ display:grid; grid-template-columns: 1fr 300px; gap: 48px; align-items:center; }
-  @media (max-width: 720px){ .hero-grid{ grid-template-columns: 1fr; } }
-  .hero-photo{ width:300px; height:300px; border-radius:6px; }
-  .hero-photo .ph span{ font-size:11px; }
-  @media (max-width:720px){ .hero-photo{ width:220px; height:220px; order:-1; } }
+  .hero-photo img{
+    position:relative; width:100%; height:100%; object-fit:cover; border-radius: 12px;
+    box-shadow: var(--shadow-md); background: var(--panel);
+  }
+  @media (max-width: 760px){
+    .hero{ padding: 48px 0 56px; }
+    .hero-grid{ grid-template-columns: 1fr; gap: 36px; }
+    .hero-photo{ width:200px; order:-1; }
+  }
   .eyebrow{
-    font-size: 13px; color: var(--accent); font-weight:600; letter-spacing:.02em;
-    display:flex; align-items:center; gap:8px; margin-bottom:22px;
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:22px;
+    font-size: 13px; color: var(--accent); font-weight:600; letter-spacing:.01em;
+    background: var(--panel); border:1px solid var(--border); border-radius: 999px; padding: 6px 14px 6px 12px;
   }
-  .eyebrow .dot{ width:7px; height:7px; border-radius:50%; background: var(--accent); }
+  .eyebrow .dot{ position:relative; width:8px; height:8px; border-radius:50%; background: #2E9E6B; }
+  .eyebrow .dot::after{
+    content:""; position:absolute; inset:0; border-radius:50%; background:#2E9E6B;
+    animation: pulse 2.2s ease-out infinite;
+  }
+  @keyframes pulse{ 0%{ transform:scale(1); opacity:.6; } 100%{ transform:scale(2.8); opacity:0; } }
   h1{
     font-family: var(--serif);
-    font-size: clamp(34px, 5vw, 52px);
-    line-height:1.15; margin: 0 0 20px; font-weight:600; color: var(--navy);
-    max-width: 16ch;
+    font-size: clamp(34px, 5vw, 54px);
+    line-height:1.12; margin: 0 0 20px; font-weight:600; color: var(--navy);
+    letter-spacing: -.015em; max-width: 16ch;
   }
   .hero p.lead{ font-size:18px; color: var(--steel); max-width: 56ch; margin: 0 0 32px; }
-  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
   .btn{
-    font-size: 14px; font-weight:600; padding: 13px 22px; border-radius: 4px;
-    border:1px solid var(--navy); transition: all .18s ease;
+    display:inline-flex; align-items:center; gap:8px;
+    font-size: 14px; font-weight:600; padding: 12px 20px; border-radius: 6px;
+    border:1px solid var(--navy); transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
   }
-  .btn.primary{ background: var(--navy); color: #fff; }
-  .btn.primary:hover{ background: var(--navy-deep); border-color: var(--navy-deep); }
-  .btn.ghost{ color: var(--navy); border-color: var(--border); }
-  .btn.ghost:hover{ border-color: var(--navy); }
+  .btn svg{ width:16px; height:16px; }
+  .btn:hover{ transform: translateY(-1px); }
+  .btn.primary{ background: var(--navy); color: #fff; box-shadow: 0 4px 14px rgba(15,42,74,.18); }
+  .btn.primary:hover{ background: var(--navy-deep); border-color: var(--navy-deep); color:#fff; box-shadow: 0 6px 20px rgba(15,42,74,.24); }
+  .btn.ghost{ color: var(--navy); border-color: var(--border); background: var(--panel); }
+  .btn.ghost:hover{ border-color: var(--navy); color: var(--navy); }
+
+  .stats{ display:flex; flex-wrap:wrap; gap: 0; margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border); max-width: 560px; }
+  .stat{ flex:1 1 0; min-width: 120px; padding-right: 20px; }
+  .stat + .stat{ padding-left: 20px; border-left: 1px solid var(--border); }
+  .stat b{ display:block; font-family: var(--serif); font-size: 28px; font-weight:600; color: var(--navy); line-height:1.1; }
+  .stat span{ font-size: 13px; color: var(--steel); }
+  @media (max-width: 480px){ .stat{ min-width: 0; } .stat + .stat{ padding-left: 14px; } .stat b{ font-size: 24px; } }
 
   /* ---------- Sections ---------- */
-  section{ padding: 64px 0; border-bottom: 1px solid var(--border); }
+  section{ padding: 72px 0; border-bottom: 1px solid var(--border); }
   section:last-of-type{ border-bottom:none; }
   .section-head{ margin-bottom: 40px; }
   .section-head .num{ font-family: var(--mono); font-size:12px; color: var(--steel-light); display:block; margin-bottom:8px; }
-  h2{ font-family: var(--serif); font-size: 28px; font-weight:600; margin: 0; color: var(--navy); }
+  h2{ font-family: var(--serif); font-size: 30px; font-weight:600; margin: 0; color: var(--navy); letter-spacing:-.01em; }
   .section-sub{ font-size:15px; color: var(--steel); margin: 8px 0 0; }
 
   /* ---------- BOM skills table ---------- */
+  .bom-card{ background: var(--panel); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow:hidden; }
   .bom{ width:100%; border-collapse: collapse; font-size:15px; }
   .bom thead th{
-    text-align:left; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.04em;
-    color: var(--steel-light); border-bottom:1px solid var(--border); padding: 0 14px 12px;
+    text-align:left; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.05em;
+    color: var(--steel-light); background: var(--bg); border-bottom:1px solid var(--border); padding: 12px 18px;
   }
-  .bom td{ padding: 16px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .bom td{ padding: 16px 18px; border-bottom:1px solid var(--border); vertical-align:top; transition: background .15s ease; }
   .bom tr:last-child td{ border-bottom:none; }
-  .bom td.ref{ font-family: var(--mono); color: var(--accent); width:50px; white-space:nowrap; font-size:13px; }
-  .bom td.cat{ font-weight:600; color: var(--navy); width: 200px; }
+  .bom tbody tr:hover td{ background: #FAFBFC; }
+  .bom td.ref{ font-family: var(--mono); color: var(--accent); width:60px; white-space:nowrap; font-size:13px; }
+  .bom td.cat{ font-weight:600; color: var(--navy); width: 220px; }
   .bom td.val{ color: var(--steel); }
   @media (max-width:640px){
     .bom thead{ display:none; }
     .bom, .bom tbody, .bom tr, .bom td{ display:block; width:100%; }
-    .bom tr{ padding: 16px 0; border-bottom:1px solid var(--border); }
+    .bom tr{ padding: 16px 18px; border-bottom:1px solid var(--border); }
+    .bom tr:last-child{ border-bottom:none; }
     .bom td{ border:none; padding: 2px 0; }
-    .bom td.cat{ padding-top:6px; }
+    .bom td.cat{ padding-top:4px; }
   }
 
   /* ---------- Projects ---------- */
   .project{
-    padding: 36px 0; border-bottom: 1px solid var(--border);
+    background: var(--panel); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
+    transition: box-shadow .25s ease, border-color .25s ease;
   }
-  .project:last-child{ border-bottom:none; padding-bottom:0; }
-  .project:first-child{ padding-top:0; }
+  .project:hover{ box-shadow: var(--shadow-md); border-color: #D5DBE1; }
+  .project:last-child{ margin-bottom:0; }
+  @media (max-width:480px){ .project{ padding: 20px 18px; } }
 
-  .project-head{ margin-bottom: 18px; }
+  .project-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom: 20px; }
   .project-head .sheet-tag{ font-family: var(--mono); font-size:12px; color: var(--steel-light); display:block; margin-bottom:6px; }
-  .project-head h3{ font-family: var(--serif); font-size:21px; margin: 0 0 4px; font-weight:600; color: var(--navy); }
+  .project-head h3{ font-family: var(--serif); font-size:22px; margin: 0 0 4px; font-weight:600; color: var(--navy); line-height:1.3; }
   .project-head .role{ font-size:13.5px; color: var(--steel); }
+  .photo-count{
+    flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; margin-top:2px;
+    font-family: var(--mono); font-size: 11.5px; color: var(--steel); white-space:nowrap;
+    background: var(--bg); border:1px solid var(--border); border-radius: 999px; padding: 4px 10px;
+  }
+  .photo-count svg{ width:13px; height:13px; }
+  @media (max-width:560px){ .photo-count{ display:none; } }
 
-  /* Carousel: 3 photos visible, scroll for more */
-  .carousel-wrap{ position:relative; margin-bottom:20px; }
+  /* Gallery carousel: whole photo always visible, click to enlarge */
+  .carousel-wrap{ position:relative; margin-bottom:22px; }
   .project-carousel{
-    display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+    display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none; padding: 2px;
   }
   .project-carousel::-webkit-scrollbar{ display:none; }
-  .carousel-item{ flex:0 0 calc((100% - 20px)/3); scroll-snap-align:start; }
-  .carousel-item .img-slot{ aspect-ratio:3/2; border-radius:6px; }
-  @media (max-width:640px){ .carousel-item{ flex:0 0 68%; } }
-  .car-btn{
-    position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:50%;
-    background:var(--panel); border:1px solid var(--border); color:var(--navy); cursor:pointer;
-    display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(15,42,74,.14);
-    font-size:15px; line-height:1; padding:0; z-index:2; transition: background .15s ease, color .15s ease;
+  .carousel-item{ flex:0 0 calc((100% - 24px)/3); scroll-snap-align:start; }
+  @media (max-width:760px){ .carousel-item{ flex:0 0 calc((100% - 12px)/2); } }
+  @media (max-width:480px){ .carousel-item{ flex:0 0 82%; } }
+
+  .shot{
+    position:relative; display:block; width:100%; aspect-ratio: 4/3; padding:0; margin:0;
+    border:1px solid var(--border); border-radius: 6px; overflow:hidden; cursor: zoom-in;
+    background: #EEF1F4; isolation:isolate;
   }
+  .shot::before{
+    content:""; position:absolute; inset:-20px; z-index:-1;
+    background-image: var(--img); background-size: cover; background-position:center;
+    filter: blur(18px) saturate(1.1); opacity:.55; transform: scale(1.1);
+  }
+  .shot img{
+    width:100%; height:100%; object-fit:contain;
+    transition: transform .45s var(--ease), opacity .4s ease;
+    opacity:0;
+  }
+  .shot img.loaded{ opacity:1; }
+  .shot .zoom{
+    position:absolute; right:10px; bottom:10px; width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(255,255,255,.92); color: var(--navy); box-shadow: 0 2px 8px rgba(15,42,74,.18);
+    opacity:0; transform: translateY(4px); transition: opacity .2s ease, transform .2s ease;
+  }
+  .shot .zoom svg{ width:16px; height:16px; }
+  .shot:hover img{ transform: scale(1.04); }
+  .shot:hover .zoom, .shot:focus-visible .zoom{ opacity:1; transform:none; }
+  @media (hover: none){ .shot .zoom{ opacity:1; transform:none; } }
+
+  .car-btn{
+    position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%;
+    background:var(--panel); border:1px solid var(--border); color:var(--navy); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(15,42,74,.16);
+    padding:0; z-index:2; transition: background .15s ease, color .15s ease, opacity .2s ease;
+  }
+  .car-btn svg{ width:18px; height:18px; }
   .car-btn:hover{ background: var(--navy); color:#fff; border-color:var(--navy); }
-  .car-btn.prev{ left:-15px; } .car-btn.next{ right:-15px; }
+  .car-btn[disabled]{ opacity:0; pointer-events:none; }
+  .car-btn.prev{ left:-19px; } .car-btn.next{ right:-19px; }
   @media (max-width:640px){ .car-btn{ display:none; } }
 
-  .project-body ul{ margin: 0 0 16px; padding-left: 18px; color: var(--text); }
+  .car-dots{ display:flex; justify-content:center; gap:6px; margin-top:12px; }
+  .car-dots button{
+    width:7px; height:7px; border-radius:999px; border:none; padding:0; cursor:pointer;
+    background: var(--border); transition: width .25s var(--ease), background .2s ease;
+  }
+  .car-dots button.on{ width:22px; background: var(--accent); }
+
+  .project-body ul{ margin: 0 0 18px; padding-left: 18px; color: var(--text); }
   .project-body li{ margin-bottom:7px; font-size:15px; }
+  .project-body li::marker{ color: var(--steel-light); }
   .tags{ display:flex; flex-wrap:wrap; gap:8px; }
   .tag{
-    font-family: var(--mono); font-size:11.5px; padding: 4px 10px; border-radius:3px;
+    font-family: var(--mono); font-size:11.5px; padding: 4px 10px; border-radius:4px;
     background: var(--bg); border:1px solid var(--border); color: var(--steel);
   }
 
   /* ---------- Education ---------- */
-  .edu-item{ margin-bottom: 26px; }
-  .edu-item h3{ font-family: var(--serif); font-size:18px; margin:0 0 3px; font-weight:600; color: var(--navy); }
+  .edu-list{ position:relative; padding-left: 26px; }
+  .edu-list::before{ content:""; position:absolute; left:5px; top:8px; bottom:8px; width:1px; background: var(--border); }
+  .edu-item{ position:relative; margin-bottom: 28px; }
+  .edu-item:last-child{ margin-bottom:0; }
+  .edu-item::before{
+    content:""; position:absolute; left:-26px; top:7px; width:11px; height:11px; border-radius:50%;
+    background: var(--panel); border:2px solid var(--accent);
+  }
+  .edu-item h3{ font-family: var(--serif); font-size:19px; margin:0 0 3px; font-weight:600; color: var(--navy); }
   .edu-item .role{ font-size:13.5px; color: var(--steel); margin-bottom:8px; }
   .edu-item ul{ margin:0; padding-left:18px; color: var(--text); font-size:15px; }
-
-  /* ---------- Certificate marquee ---------- */
-  .marquee{ overflow:hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent); }
-  .marquee-track{ display:flex; gap:16px; width:max-content; padding: 0 28px; animation: scroll-x 32s linear infinite; }
-  .marquee:hover .marquee-track{ animation-play-state: paused; }
-  @keyframes scroll-x{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
-  .cert-card{ width:240px; flex:0 0 auto; }
-  .cert-card .img-slot{ aspect-ratio: 3/2; border-radius:6px; }
-  .cert-card .cap{ font-size:12.5px; color: var(--steel); margin-top:8px; text-align:center; }
-  @media (prefers-reduced-motion: reduce){ .marquee-track{ animation:none; } }
 
   /* ---------- Badges ---------- */
   .badge-grid{ display:flex; flex-wrap:wrap; gap:10px; }
   .badge{
-    font-size:13px; padding: 9px 15px; border-radius:4px;
+    font-size:13.5px; padding: 9px 15px; border-radius:6px;
     background: var(--panel); border:1px solid var(--border); color: var(--steel);
+    transition: border-color .2s ease, transform .2s ease;
   }
+  .badge:hover{ border-color: var(--steel-light); transform: translateY(-1px); }
   .badge b{ color: var(--navy); font-weight:600; }
 
+  /* ---------- Certificates grid ---------- */
+  .cert-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width:860px){ .cert-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width:520px){ .cert-grid{ grid-template-columns: 1fr; } }
+  .cert-card{
+    background: var(--panel); border:1px solid var(--border); border-radius: var(--radius);
+    overflow:hidden; box-shadow: var(--shadow-sm); display:flex; flex-direction:column;
+    transition: transform .25s var(--ease), box-shadow .25s ease;
+  }
+  .cert-card:hover{ transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .cert-card .shot{ border:none; border-radius:0; border-bottom:1px solid var(--border); aspect-ratio: 4/3; }
+  .cert-card .shot img{ padding: 10px; }
+  .cert-card .shot::before{ opacity:.35; }
+  .cert-meta{ padding: 14px 16px 16px; }
+  .cert-meta h3{ font-size:14.5px; font-weight:600; color: var(--navy); margin:0 0 3px; line-height:1.4; }
+  .cert-meta p{ font-size:13px; color: var(--steel); margin:0; }
+
+  /* ---------- Lightbox ---------- */
+  .lb{
+    position:fixed; inset:0; z-index:100; display:grid;
+    grid-template-columns: 72px 1fr 72px; grid-template-rows: auto 1fr auto;
+    background: rgba(8,20,36,.94); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    opacity:0; visibility:hidden; transition: opacity .25s ease, visibility 0s linear .25s;
+  }
+  .lb.open{ opacity:1; visibility:visible; transition: opacity .25s ease; }
+  .lb-top{
+    grid-column: 1 / -1; display:flex; justify-content:space-between; align-items:center;
+    padding: 16px 20px; color:#DCE6EF; font-size:13px;
+  }
+  .lb-count{ font-family: var(--mono); color:#A9BACB; }
+  .lb-title{ font-weight:600; margin-left:14px; color:#fff; }
+  .lb-btn{
+    width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06); color:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition: background .15s ease;
+  }
+  .lb-btn:hover{ background: rgba(255,255,255,.16); }
+  .lb-btn svg{ width:20px; height:20px; }
+  .lb-btn[disabled]{ opacity:.25; pointer-events:none; }
+  .lb-nav{ align-self:center; justify-self:center; }
+  .lb-stage{ position:relative; margin:0; display:flex; align-items:center; justify-content:center; min-height:0; min-width:0; touch-action: pan-y; }
+  .lb-img{
+    max-width:100%; max-height:100%; max-height:calc(100vh - 170px); object-fit:contain; border-radius:4px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    transition: opacity .25s ease, transform .3s var(--ease);
+  }
+  .lb-img.swap{ opacity:0; transform: scale(.985); }
+  .lb-cap{ grid-column: 1 / -1; text-align:center; color:#DCE6EF; font-size:14.5px; padding: 14px 20px 22px; min-height: 56px; }
+  .lb-spin{
+    position:absolute; width:28px; height:28px; border-radius:50%;
+    border:2px solid rgba(255,255,255,.2); border-top-color:#fff; animation: spin .8s linear infinite;
+    opacity:0; transition: opacity .2s ease;
+  }
+  .lb-stage.loading .lb-spin{ opacity:1; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  @media (max-width:640px){
+    .lb{ grid-template-columns: 0 1fr 0; }
+    .lb-nav{ display:none; }
+    .lb-title{ display:none; }
+  }
+
   /* ---------- Footer ---------- */
-  footer{ background: var(--navy-deep); padding: 52px 0 32px; }
+  footer{ background: var(--navy-deep); padding: 64px 0 32px; }
   footer h2{ color: #fff; }
   footer .section-sub{ color: #A9BACB; }
-  .contact-row{ display:flex; flex-wrap:wrap; gap:28px; margin: 26px 0 34px; }
-  .contact-row a{ font-size:15px; color: #DCE6EF; font-weight:500; }
-  .contact-row a:hover{ color: #fff; }
+  footer .section-head .num{ color: var(--steel); }
+  .contact-row{ display:flex; flex-wrap:wrap; gap:12px; margin: 28px 0 40px; }
+  .contact-row a{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:14.5px; color: #DCE6EF; font-weight:500;
+    padding: 11px 16px; border-radius: 6px; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);
+    transition: background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .contact-row a svg{ width:16px; height:16px; color:#8FA1B0; transition: color .2s ease; }
+  .contact-row a:hover{ color: #fff; background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.3); }
+  .contact-row a:hover svg{ color:#fff; }
   .titleblock{
     border-top: 1px solid rgba(255,255,255,0.12); padding-top:20px;
     display:grid; grid-template-columns: repeat(4, 1fr); gap:16px;
@@ -220,47 +390,64 @@
   }
   .titleblock div b{ display:block; color: #DCE6EF; font-size:13px; margin-bottom:3px; font-weight:600; }
   @media (max-width:640px){ .titleblock{ grid-template-columns: repeat(2,1fr); } }
-  .copyright{ text-align:center; font-size:12px; color: #64798C; margin-top:26px; }
+  .copyright{ text-align:center; font-size:12px; color: #64798C; margin-top:28px; }
 
-  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  /* ---------- Reveal on scroll ---------- */
+  .js .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s var(--ease), transform .6s var(--ease), box-shadow .25s ease, border-color .25s ease; }
+  .js .reveal.in{ opacity:1; transform:none; }
+  .js .cert-card.reveal.in{ transition: opacity .6s var(--ease), transform .25s var(--ease), box-shadow .25s ease; }
+  .js .cert-card.reveal.in:hover{ transform: translateY(-3px); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *, *::before, *::after{ animation: none !important; transition-duration: .01ms !important; }
+    .js .reveal{ opacity:1; transform:none; }
+    .project-carousel{ scroll-behavior:auto; }
+  }
 </style>
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header>
+<header id="top">
   <div class="wrap headbar">
-    <div class="brand">Mahdi Hachicha</div>
+    <a class="brand" href="#profile">Mahdi Hachicha</a>
     <button class="navtoggle" id="navToggle" aria-expanded="false" aria-controls="mainnav">Menu</button>
-    <nav class="mainnav" id="mainnav">
+    <nav class="mainnav" id="mainnav" aria-label="Main">
       <a href="#profile">Profile</a>
       <a href="#skills">Skills</a>
       <a href="#work">Work</a>
       <a href="#education">Education</a>
-      <a href="#gallery">Certificates</a>
+      <a href="#certificates">Certificates</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
 </header>
 
-<main>
+<main id="main">
   <!-- HERO -->
   <section class="hero" id="profile">
     <div class="wrap hero-grid">
-      <div>
-        <div class="eyebrow"><span class="dot"></span> Available for internships — Tunis, Tunisia</div>
+      <div class="reveal">
+        <div class="eyebrow"></span> Available for internships </div>
         <h1>Embedded Systems &amp; Robotics Engineer</h1>
         <p class="lead">I build the layer between hardware and the network — firmware, communication protocols, and the tools to test them. Engineering student at MedTech University; founder of PillPal and MiniMakers.</p>
         <div class="cta-row">
-          <a class="btn primary" href="#work">View projects</a>
+          <a class="btn primary" href="#work">View projects
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn ghost" href="mailto:mahdi.hachicha@medtech.tn">Get in touch</a>
-          <a class="btn ghost" href="resume.pdf" download>Download CV</a>
+          <a class="btn ghost" href="resume.pdf" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download CV</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>4</b><span>Project awards</span></div>
+          <div class="stat"><b>30+</b><span>Students taught</span></div>
+          <div class="stat"><b>2</b><span>Ventures founded</span></div>
         </div>
       </div>
-      <div class="hero-photo">
-        <div class="img-slot">
-          <img src="images/profile.jpg" alt="Mahdi Hachicha" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="ph"><span>images/profile.jpg</span></div>
-        </div>
+      <div class="hero-photo reveal">
+        <img src="images/profile.jpg" alt="Mahdi Hachicha speaking at an IEEE-HKN event" width="900" height="900" fetchpriority="high">
       </div>
     </div>
   </section>
@@ -268,50 +455,55 @@
   <!-- SKILLS -->
   <section id="skills">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <span class="num">01</span>
         <h2>Skills</h2>
         <p class="section-sub">The stack I build with, organized like a bill of materials</p>
       </div>
-      <table class="bom">
-        <thead><tr><th>Ref</th><th>Category</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td class="ref">U1</td><td class="cat">Robotics &amp; Simulation</td><td class="val">ROS 2 (nodes, SLAM, trajectory planning), LiDAR perception, autonomous navigation</td></tr>
-          <tr><td class="ref">U2</td><td class="cat">Embedded &amp; Hardware</td><td class="val">STM32, ESP32, Raspberry Pi 4, Arduino, FPGA (Verilog), PCB Design (Altium)</td></tr>
-          <tr><td class="ref">U3</td><td class="cat">Protocols</td><td class="val">CAN, I2C, SPI, UART, Modbus RTU/TCP, Wi-Fi, Bluetooth, MQTT, LoRa, GSM, ESP-NOW, OBD-II</td></tr>
-          <tr><td class="ref">U4</td><td class="cat">Software &amp; Tools</td><td class="val">ROS 2, MATLAB/Simulink, Fusion 360, Oracle APEX, Git</td></tr>
-          <tr><td class="ref">U5</td><td class="cat">Languages</td><td class="val">C / C++, Python, Java, Verilog</td></tr>
-          <tr><td class="ref">U6</td><td class="cat">Domains</td><td class="val">Embedded systems, autonomous robotics, IoT, automotive diagnostics, embedded AI</td></tr>
-        </tbody>
-      </table>
+      <div class="bom-card reveal">
+        <table class="bom">
+          <thead><tr><th>Ref</th><th>Category</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td class="ref">U1</td><td class="cat">Robotics &amp; Simulation</td><td class="val">ROS 2 (nodes, SLAM, trajectory planning), LiDAR perception, autonomous navigation</td></tr>
+            <tr><td class="ref">U2</td><td class="cat">Embedded &amp; Hardware</td><td class="val">STM32, ESP32, Raspberry Pi 4, Arduino, FPGA (Verilog), PCB Design (Altium)</td></tr>
+            <tr><td class="ref">U3</td><td class="cat">Protocols</td><td class="val">CAN, I2C, SPI, UART, Modbus RTU/TCP, Wi-Fi, Bluetooth, MQTT, LoRa, GSM, ESP-NOW, OBD-II</td></tr>
+            <tr><td class="ref">U4</td><td class="cat">Software &amp; Tools</td><td class="val">ROS 2, MATLAB/Simulink, Fusion 360, Oracle APEX, Git</td></tr>
+            <tr><td class="ref">U5</td><td class="cat">Languages</td><td class="val">C / C++, Python, Java, Verilog</td></tr>
+            <tr><td class="ref">U6</td><td class="cat">Domains</td><td class="val">Embedded systems, autonomous robotics, IoT, automotive diagnostics, embedded AI</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
-  <!-- PROJECTS -->
+  <!-- PROJECTS
+       To add a photo: put the full image in images/projects/ and a ~720px copy in images/projects/thumbs/,
+       then add a carousel-item. data-full = large image shown in the viewer, alt = caption. -->
   <section id="work">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <span class="num">02</span>
         <h2>Work</h2>
-        <p class="section-sub">Projects, internships &amp; founding work, most recent first</p>
+        <p class="section-sub">Projects, internships &amp; founding work, most recent first. Click any photo to enlarge.</p>
       </div>
 
-      <div class="project">
+      <article class="project reveal">
         <div class="project-head">
-          <span class="sheet-tag">Sheet 01</span>
-          <h3>PillPal — Founder &amp; Hardware / 3D Design Lead</h3>
-          <div class="role">Startup · 2026 – Present</div>
+          <div>
+            <span class="sheet-tag">Sheet 01</span>
+            <h3>PillPal — Founder &amp; Hardware / 3D Design Lead</h3>
+            <div class="role">Startup · 2026 – Present</div>
+          </div>
+          <span class="photo-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 7"/></svg>5 photos</span>
         </div>
         <div class="carousel-wrap">
-          <div class="project-carousel" id="car-pillpal">
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-1.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-1.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-2.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-3.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-4.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/pillpal-5.jpg" alt="PillPal" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/pillpal-5.jpg</span></div></div></div>
+          <div class="project-carousel" data-title="PillPal">
+            <div class="carousel-item"><button class="shot" data-full="images/projects/pillpal-1.jpg"><img src="images/projects/thumbs/pillpal-1.jpg" alt="PillPal dispenser prototype on the workbench" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/pillpal-2.jpg"><img src="images/projects/thumbs/pillpal-2.jpg" alt="Companion app — morning, midday and night dose schedule" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/pillpal-3.jpg"><img src="images/projects/thumbs/pillpal-3.jpg" alt="Control electronics prototyped on perfboard" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/pillpal-4.jpg"><img src="images/projects/thumbs/pillpal-4.jpg" alt="Control board — component side" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/pillpal-5.jpg"><img src="images/projects/thumbs/pillpal-5.jpg" alt="3D-designed enclosure with the dispensing slot" loading="lazy" decoding="async"></button></div>
           </div>
-          <button class="car-btn prev" data-target="car-pillpal" aria-label="Previous photos">&#8592;</button>
-          <button class="car-btn next" data-target="car-pillpal" aria-label="Next photos">&#8594;</button>
         </div>
         <div class="project-body">
           <ul>
@@ -322,78 +514,25 @@
           </ul>
           <div class="tags"><span class="tag">ESP32</span><span class="tag">Mobile App</span><span class="tag">AI Detection</span><span class="tag">3D Design</span></div>
         </div>
-      </div>
+      </article>
 
-      <div class="project">
+      <article class="project reveal">
         <div class="project-head">
-          <span class="sheet-tag">Sheet 02</span>
-          <h3>MiniMakers — Founder</h3>
-          <div class="role">Robotics School for Ages 9–15 · Tunis, Tunisia · 2025 – Present</div>
+          <div>
+            <span class="sheet-tag">Sheet 02</span>
+            <h3>Automotive Diagnostic System — Bako Motors</h3>
+            <div class="role">Technical Project · 2025</div>
+          </div>
+          <span class="photo-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 7"/></svg>5 photos</span>
         </div>
         <div class="carousel-wrap">
-          <div class="project-carousel" id="car-minimakers">
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-1.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-1.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-2.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-3.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-4.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/minimakers-5.jpg" alt="MiniMakers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/minimakers-5.jpg</span></div></div></div>
+          <div class="project-carousel" data-title="Automotive Diagnostic System">
+            <div class="carousel-item"><button class="shot" data-full="images/projects/bako-1.jpg"><img src="images/projects/thumbs/bako-1.jpg" alt="Diagnostic unit electronics in their enclosure" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/bako-2.jpg"><img src="images/projects/thumbs/bako-2.jpg" alt="System installed on a Bako Motors vehicle" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/bako-3.jpg"><img src="images/projects/thumbs/bako-3.jpg" alt="Project team at the SMU FabLab" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/bako-4.jpg"><img src="images/projects/thumbs/bako-4.jpg" alt="Live demo of the vehicle monitoring system" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/bako-5.jpg"><img src="images/projects/thumbs/bako-5.jpg" alt="PCB layout of the diagnostic board" loading="lazy" decoding="async"></button></div>
           </div>
-          <button class="car-btn prev" data-target="car-minimakers" aria-label="Previous photos">&#8592;</button>
-          <button class="car-btn next" data-target="car-minimakers" aria-label="Next photos">&#8594;</button>
-        </div>
-        <div class="project-body">
-          <ul>
-            <li>Founded a robotics education program for kids and teenagers</li>
-            <li>Taught 30+ students during a summer program covering Arduino programming and hands-on robotics</li>
-            <li>Designed and led a flagship build: a four-wheel autonomous car with obstacle detection</li>
-          </ul>
-          <div class="tags"><span class="tag">Arduino</span><span class="tag">Robotics Education</span><span class="tag">Curriculum Design</span></div>
-        </div>
-      </div>
-
-      <div class="project">
-        <div class="project-head">
-          <span class="sheet-tag">Sheet 03</span>
-          <h3>Multi-Protocol IoT Gateway — Summer Internship, Tekkim</h3>
-          <div class="role">Embedded Systems Internship · Tunis, Tunisia · June – July 2026</div>
-        </div>
-        <div class="carousel-wrap">
-          <div class="project-carousel" id="car-tekkim">
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-1.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-1.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-2.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-3.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-4.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/tekkim-5.jpg" alt="Tekkim IoT gateway" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/tekkim-5.jpg</span></div></div></div>
-          </div>
-          <button class="car-btn prev" data-target="car-tekkim" aria-label="Previous photos">&#8592;</button>
-          <button class="car-btn next" data-target="car-tekkim" aria-label="Next photos">&#8594;</button>
-        </div>
-        <div class="project-body">
-          <ul>
-            <li>Designed a multi-protocol gateway on ESP32 bridging Modbus RTU/TCP, Wi-Fi, Bluetooth, MQTT, GSM, LoRa, and ESP-NOW</li>
-            <li>Built an embedded web interface hosted directly on the ESP32 for on-device configuration</li>
-            <li>Developed a Python application to simulate and monitor Modbus registers for end-to-end testing without physical field devices</li>
-          </ul>
-          <div class="tags"><span class="tag">ESP32</span><span class="tag">Modbus</span><span class="tag">MQTT</span><span class="tag">LoRa</span><span class="tag">GSM</span><span class="tag">Python</span></div>
-        </div>
-      </div>
-
-      <div class="project">
-        <div class="project-head">
-          <span class="sheet-tag">Sheet 04</span>
-          <h3>Automotive Diagnostic System — Bako Motors</h3>
-          <div class="role">Technical Project · 2025</div>
-        </div>
-        <div class="carousel-wrap">
-          <div class="project-carousel" id="car-bako">
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-1.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-1.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-2.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-3.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-4.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/bako-5.jpg" alt="Bako Motors diagnostic system" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/bako-5.jpg</span></div></div></div>
-          </div>
-          <button class="car-btn prev" data-target="car-bako" aria-label="Previous photos">&#8592;</button>
-          <button class="car-btn next" data-target="car-bako" aria-label="Next photos">&#8594;</button>
         </div>
         <div class="project-body">
           <ul>
@@ -403,24 +542,53 @@
           </ul>
           <div class="tags"><span class="tag">CAN Bus</span><span class="tag">OBD-II</span><span class="tag">Python</span><span class="tag">Cloud Dashboard</span></div>
         </div>
-      </div>
+      </article>
 
-      <div class="project">
+      <article class="project reveal">
         <div class="project-head">
-          <span class="sheet-tag">Sheet 05</span>
-          <h3>Autonomous Vehicle — Research Internship, MedTech SmartLab</h3>
-          <div class="role">Research Internship · 2024</div>
+          <div>
+            <span class="sheet-tag">Sheet 03</span>
+            <h3>Multi-Protocol IoT Gateway — Summer Internship, Tekkim</h3>
+            <div class="role">Embedded Systems Internship · Tunis, Tunisia · June – July 2026</div>
+          </div>
+          <span class="photo-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 7"/></svg>5 photos</span>
         </div>
         <div class="carousel-wrap">
-          <div class="project-carousel" id="car-smartlab">
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-1.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-1.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-2.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-3.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-4.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/smartlab-5.jpg" alt="Autonomous vehicle" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/smartlab-5.jpg</span></div></div></div>
+          <div class="project-carousel" data-title="Multi-Protocol IoT Gateway">
+            <div class="carousel-item"><button class="shot" data-full="images/projects/tekkim-1.jpg"><img src="images/projects/thumbs/tekkim-1.jpg" alt="Gateway test bench with Modbus field modules" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/tekkim-2.jpg"><img src="images/projects/thumbs/tekkim-2.jpg" alt="Integration and end-to-end testing setup" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/tekkim-3.jpg"><img src="images/projects/thumbs/tekkim-3.jpg" alt="Multi-protocol gateway hardware" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/tekkim-4.jpg"><img src="images/projects/thumbs/tekkim-4.jpg" alt="Configuration interface" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/tekkim-5.jpg"><img src="images/projects/thumbs/tekkim-5.jpg" alt="Modbus register monitoring interface" loading="lazy" decoding="async"></button></div>
           </div>
-          <button class="car-btn prev" data-target="car-smartlab" aria-label="Previous photos">&#8592;</button>
-          <button class="car-btn next" data-target="car-smartlab" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
+          <ul>
+            <li>Designed a multi-protocol gateway on ESP32 bridging Modbus RTU/TCP, Wi-Fi, Bluetooth, MQTT, GSM, LoRa, and ESP-NOW</li>
+            <li>Built an embedded web interface hosted directly on the ESP32 for on-device configuration</li>
+            <li>Developed a Python application to simulate and monitor Modbus registers for end-to-end testing without physical field devices</li>
+          </ul>
+          <div class="tags"><span class="tag">ESP32</span><span class="tag">Modbus</span><span class="tag">MQTT</span><span class="tag">LoRa</span><span class="tag">GSM</span><span class="tag">Python</span></div>
+        </div>
+      </article>
+
+      <article class="project reveal">
+        <div class="project-head">
+          <div>
+            <span class="sheet-tag">Sheet 04</span>
+            <h3>Autonomous Vehicle — Research Internship, MedTech SmartLab</h3>
+            <div class="role">Research Internship · 2024</div>
+          </div>
+          <span class="photo-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 7"/></svg>5 photos</span>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" data-title="Autonomous Vehicle">
+            <div class="carousel-item"><button class="shot" data-full="images/projects/smartlab-1.jpg"><img src="images/projects/thumbs/smartlab-1.jpg" alt="Autonomous vehicle platform and wiring" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/smartlab-2.jpg"><img src="images/projects/thumbs/smartlab-2.jpg" alt="Top view of the onboard electronics" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/smartlab-3.jpg"><img src="images/projects/thumbs/smartlab-3.jpg" alt="LiDAR data visualized in RViz" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/smartlab-4.jpg"><img src="images/projects/thumbs/smartlab-4.jpg" alt="Simulation environment for navigation testing" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/smartlab-5.jpg"><img src="images/projects/thumbs/smartlab-5.jpg" alt="Electronics test bench" loading="lazy" decoding="async"></button></div>
+          </div>
         </div>
         <div class="project-body">
           <ul>
@@ -430,24 +598,53 @@
           </ul>
           <div class="tags"><span class="tag">ROS 2</span><span class="tag">LiDAR</span><span class="tag">SLAM</span><span class="tag">Raspberry Pi 4</span></div>
         </div>
-      </div>
+      </article>
 
-      <div class="project">
+      <article class="project reveal">
         <div class="project-head">
-          <span class="sheet-tag">Sheet 06</span>
-          <h3>ShopMate — Smart Autonomous Shopping Cart</h3>
-          <div class="role">Technical Project · January – May 2025</div>
+          <div>
+            <span class="sheet-tag">Sheet 05</span>
+            <h3>MiniMakers — Founder</h3>
+            <div class="role">Robotics School for Ages 9–15 · Tunis, Tunisia · 2025 – Present</div>
+          </div>
+          <span class="photo-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 7"/></svg>5 photos</span>
         </div>
         <div class="carousel-wrap">
-          <div class="project-carousel" id="car-shopmate">
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-1.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-1.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-2.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-2.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-3.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-3.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-4.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-4.jpg</span></div></div></div>
-            <div class="carousel-item"><div class="img-slot"><img src="images/projects/shopmate-5.jpg" alt="ShopMate smart shopping cart" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/projects/shopmate-5.jpg</span></div></div></div>
+          <div class="project-carousel" data-title="MiniMakers">
+            <div class="carousel-item"><button class="shot" data-full="images/projects/minimakers-1.jpg"><img src="images/projects/thumbs/minimakers-1.jpg" alt="Guiding students through an Arduino robot build" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/minimakers-2.jpg"><img src="images/projects/thumbs/minimakers-2.jpg" alt="Student wiring and programming a robot car" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/minimakers-3.jpg"><img src="images/projects/thumbs/minimakers-3.jpg" alt="The MiniMakers workshop space" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/minimakers-4.jpg"><img src="images/projects/thumbs/minimakers-4.jpg" alt="Four-wheel robot car with obstacle detection" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/minimakers-5.jpg"><img src="images/projects/thumbs/minimakers-5.jpg" alt="Student programming with block-based code" loading="lazy" decoding="async"></button></div>
           </div>
-          <button class="car-btn prev" data-target="car-shopmate" aria-label="Previous photos">&#8592;</button>
-          <button class="car-btn next" data-target="car-shopmate" aria-label="Next photos">&#8594;</button>
+        </div>
+        <div class="project-body">
+          <ul>
+            <li>Founded a robotics education program for kids and teenagers</li>
+            <li>Taught 30+ students during a summer program covering Arduino programming and hands-on robotics</li>
+            <li>Designed and led a flagship build: a four-wheel autonomous car with obstacle detection</li>
+          </ul>
+          <div class="tags"><span class="tag">Arduino</span><span class="tag">Robotics Education</span><span class="tag">Curriculum Design</span></div>
+        </div>
+      </article>
+
+      <article class="project reveal">
+        <div class="project-head">
+          <div>
+            <span class="sheet-tag">Sheet 06</span>
+            <h3>ShopMate — Smart Autonomous Shopping Cart</h3>
+            <div class="role">Technical Project · January – May 2025</div>
+          </div>
+          <span class="photo-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 7"/></svg>5 photos</span>
+        </div>
+        <div class="carousel-wrap">
+          <div class="project-carousel" data-title="ShopMate">
+            <div class="carousel-item"><button class="shot" data-full="images/projects/shopmate-1.jpg"><img src="images/projects/thumbs/shopmate-1.jpg" alt="ShopMate in the demo store" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/shopmate-2.jpg"><img src="images/projects/thumbs/shopmate-2.jpg" alt="RFID scanner and display module" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/shopmate-3.jpg"><img src="images/projects/thumbs/shopmate-3.jpg" alt="Custom PCB layout" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/shopmate-4.jpg"><img src="images/projects/thumbs/shopmate-4.jpg" alt="Cart prototype in the store mock-up" loading="lazy" decoding="async"></button></div>
+            <div class="carousel-item"><button class="shot" data-full="images/projects/shopmate-5.jpg"><img src="images/projects/thumbs/shopmate-5.jpg" alt="ShopMate project poster" loading="lazy" decoding="async"></button></div>
+          </div>
         </div>
         <div class="project-body">
           <ul>
@@ -458,13 +655,15 @@
           </ul>
           <div class="tags"><span class="tag">RFID</span><span class="tag">Custom PCB</span><span class="tag">Sensors</span><span class="tag">Autonomous Navigation</span></div>
         </div>
-      </div>
+      </article>
 
-      <div class="project">
+      <article class="project reveal">
         <div class="project-head">
-          <span class="sheet-tag">Sheet 07</span>
-          <h3>Banking Declarations Dashboard — SmartSystem Tunisia</h3>
-          <div class="role">Professional Internship · 2023</div>
+          <div>
+            <span class="sheet-tag">Sheet 07</span>
+            <h3>Banking Declarations Dashboard — SmartSystem Tunisia</h3>
+            <div class="role">Professional Internship · 2023</div>
+          </div>
         </div>
         <div class="project-body">
           <ul>
@@ -473,7 +672,7 @@
           </ul>
           <div class="tags"><span class="tag">Oracle APEX</span><span class="tag">Digitalization</span></div>
         </div>
-      </div>
+      </article>
 
     </div>
   </section>
@@ -481,30 +680,32 @@
   <!-- EDUCATION -->
   <section id="education">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <span class="num">03</span>
         <h2>Education</h2>
       </div>
-      <div class="edu-item">
-        <h3>Engineering Degree in Computer Systems</h3>
-        <div class="role">MedTech University — Tunis, Tunisia · 2024 – Present</div>
-        <ul>
-          <li>Specialization: Embedded Systems, Networks, IoT, Robotics &amp; Low-Level Programming</li>
-        </ul>
-      </div>
-      <div class="edu-item">
-        <h3>Integrated Preparatory Classes (MPI)</h3>
-        <div class="role">MedTech University — Tunis, Tunisia · 2022 – 2024</div>
-        <ul>
-          <li>Intensive training in Mathematics, Physics, Computer Science &amp; Engineering Sciences</li>
-        </ul>
+      <div class="edu-list reveal">
+        <div class="edu-item">
+          <h3>Engineering Degree in Computer Systems</h3>
+          <div class="role">MedTech University — Tunis, Tunisia · 2024 – Present</div>
+          <ul>
+            <li>Specialization: Embedded Systems, Networks, IoT, Robotics &amp; Low-Level Programming</li>
+          </ul>
+        </div>
+        <div class="edu-item">
+          <h3>Integrated Preparatory Classes (MPI)</h3>
+          <div class="role">MedTech University — Tunis, Tunisia · 2022 – 2024</div>
+          <ul>
+            <li>Intensive training in Mathematics, Physics, Computer Science &amp; Engineering Sciences</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="section-head" style="margin-top:44px;">
+      <div class="section-head reveal" style="margin-top:56px;">
         <span class="num">04</span>
         <h2>Leadership &amp; Awards</h2>
       </div>
-      <div class="badge-grid">
+      <div class="badge-grid reveal">
         <span class="badge"><b>IEEE-HKN</b> Nu Tau Chapter, Member — since Jan 2026</span>
         <span class="badge"><b>IEEE SMU</b> Student Branch Treasurer — 2024</span>
         <span class="badge"><b>IEEE SMU RAS</b> Treasurer — 2023</span>
@@ -518,31 +719,40 @@
     </div>
   </section>
 
-  <!-- CERTIFICATES / ACHIEVEMENTS GALLERY -->
-  <section id="gallery">
+  <!-- CERTIFICATES
+       To add one: put the full image in images/certificates/ and a ~720px copy in images/certificates/thumbs/. -->
+  <section id="certificates">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <span class="num">05</span>
         <h2>Certificates &amp; Achievements</h2>
-        <p class="section-sub">Hover to pause</p>
+        <p class="section-sub">Click a certificate to view it full size</p>
       </div>
-    </div>
-    <div class="marquee">
-      <div class="marquee-track">
-        <!-- Set 1 -->
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-1.jpg" alt="Certificate 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-1.jpg</span></div></div><div class="cap">Altium Designer — PCB Design</div></div>
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-2.jpg" alt="Certificate 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-2.jpg</span></div></div><div class="cap">ROS 2 Certification</div></div>
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-3.jpg" alt="Certificate 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-3.jpg</span></div></div><div class="cap">Best Year-End Project — 2026</div></div>
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-4.jpg" alt="Certificate 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-4.jpg</span></div></div><div class="cap">Best Year-End Project — 2025</div></div>
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-5.jpg" alt="Certificate 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-5.jpg</span></div></div><div class="cap">Best Year-End Project — 2024</div></div>
-        <div class="cert-card"><div class="img-slot"><img src="images/certificates/cert-6.jpg" alt="Certificate 6" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-6.jpg</span></div></div><div class="cap">2nd Place — TechRevive 2.0, 2025</div></div>
-        <!-- Set 2 (duplicate for seamless loop, keep in sync with Set 1) -->
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-1.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-1.jpg</span></div></div><div class="cap">Altium Designer — PCB Design</div></div>
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-2.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-2.jpg</span></div></div><div class="cap">ROS 2 Certification</div></div>
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-3.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-3.jpg</span></div></div><div class="cap">Best Year-End Project — 2026</div></div>
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-4.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-4.jpg</span></div></div><div class="cap">Best Year-End Project — 2025</div></div>
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-5.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-5.jpg</span></div></div><div class="cap">Best Year-End Project — 2024</div></div>
-        <div class="cert-card" aria-hidden="true"><div class="img-slot"><img src="images/certificates/cert-6.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="ph"><span>images/certificates/cert-6.jpg</span></div></div><div class="cap">2nd Place — TechRevive 2.0, 2025</div></div>
+      <div class="cert-grid" data-title="Certificates">
+        <figure class="cert-card reveal" style="margin:0">
+          <button class="shot" data-full="images/certificates/cert-1.jpg"><img src="images/certificates/thumbs/cert-1.jpg" alt="Altium Education — PCB Basic Design Course" loading="lazy" decoding="async"></button>
+          <figcaption class="cert-meta"><h3>PCB Basic Design Course</h3><p>Altium Education · March 2025</p></figcaption>
+        </figure>
+        <figure class="cert-card reveal" style="margin:0">
+          <button class="shot" data-full="images/certificates/cert-2.jpg"><img src="images/certificates/thumbs/cert-2.jpg" alt="Google Agile Project Management — Coursera course certificate" loading="lazy" decoding="async"></button>
+          <figcaption class="cert-meta"><h3>Agile Project Management</h3><p>Google · Coursera · February 2025</p></figcaption>
+        </figure>
+        <figure class="cert-card reveal" style="margin:0">
+          <button class="shot" data-full="images/certificates/cert-4.jpg"><img src="images/certificates/thumbs/cert-4.jpg" alt="Best Student Project Certificate — MedTech, May 2025" loading="lazy" decoding="async"></button>
+          <figcaption class="cert-meta"><h3>Best Student Project — 2025</h3><p>Mediterranean Institute of Technology · May 2025</p></figcaption>
+        </figure>
+        <figure class="cert-card reveal" style="margin:0">
+          <button class="shot" data-full="images/certificates/cert-3.jpg"><img src="images/certificates/thumbs/cert-3.jpg" alt="Best Student Project Certificate — MedTech, May 2024" loading="lazy" decoding="async"></button>
+          <figcaption class="cert-meta"><h3>Best Student Project — 2024</h3><p>Mediterranean Institute of Technology · May 2024</p></figcaption>
+        </figure>
+        <figure class="cert-card reveal" style="margin:0">
+          <button class="shot" data-full="images/certificates/cert-6.jpg"><img src="images/certificates/thumbs/cert-6.jpg" alt="Certificate of IEEE Volunteering — Student Branch Treasurer" loading="lazy" decoding="async"></button>
+          <figcaption class="cert-meta"><h3>IEEE Volunteering — SB Treasurer</h3><p>IEEE SMU Student Branch · Sep 2023 – Dec 2024</p></figcaption>
+        </figure>
+        <figure class="cert-card reveal" style="margin:0">
+          <button class="shot" data-full="images/certificates/cert-5.jpg"><img src="images/certificates/thumbs/cert-5.jpg" alt="IEEE Certificate of Achievement — RAS Chapter Treasurer" loading="lazy" decoding="async"></button>
+          <figcaption class="cert-meta"><h3>Certificate of Achievement — RAS Treasurer</h3><p>IEEE SMU Robotics &amp; Automation Society · 2022–2023</p></figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -550,48 +760,206 @@
 
 <footer id="contact">
   <div class="wrap">
-    <div class="section-head" style="margin-bottom:0;">
-      <span class="num" style="color:#5B7185;">05</span>
+    <div class="section-head reveal" style="margin-bottom:0;">
+      <span class="num">06</span>
       <h2>Contact</h2>
       <p class="section-sub">Open to embedded systems, IoT and robotics internships</p>
     </div>
-    <div class="contact-row">
-      <a href="mailto:mahdi.hachicha@medtech.tn">mahdi.hachicha@medtech.tn</a>
-      <a href="tel:+21693185425">+216 93 185 425</a>
-      <a href="https://linkedin.com/in/mahdi-hachicha" target="_blank" rel="noopener">linkedin.com/in/mahdi-hachicha</a>
+    <div class="contact-row reveal">
+      <a href="mailto:mahdi.hachicha@medtech.tn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>mahdi.hachicha@medtech.tn</a>
+      <a href="tel:+21693185425"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>+216 93 185 425</a>
+      <a href="https://linkedin.com/in/mahdi-hachicha" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.5V9h3.6v11.5z"/></svg>linkedin.com/in/mahdi-hachicha</a>
+      <a href="resume.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download CV</a>
     </div>
     <div class="titleblock">
       <div><b>Designed by</b>Mahdi Hachicha</div>
       <div><b>Location</b>Tunis, Tunisia</div>
-      <div><b>Updated</b>September 2026</div>
+      <div><b>Updated</b>October 2026</div>
       <div><b>Status</b>Open to internships</div>
     </div>
     <div class="copyright">© 2026 Mahdi Hachicha</div>
   </div>
 </footer>
 
+<!-- Lightbox -->
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
+  <div class="lb-top">
+    <div><span class="lb-count" id="lbCount"></span><span class="lb-title" id="lbTitle"></span></div>
+    <button class="lb-btn" id="lbClose" aria-label="Close viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <button class="lb-btn lb-nav" id="lbPrev" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+  <figure class="lb-stage" id="lbStage"><img class="lb-img" id="lbImg" alt=""><span class="lb-spin" aria-hidden="true"></span></figure>
+  <button class="lb-btn lb-nav" id="lbNext" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+  <div class="lb-cap" id="lbCap" aria-live="polite"></div>
+</div>
+
 <script>
-  const toggle = document.getElementById('navToggle');
-  const nav = document.getElementById('mainnav');
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Mobile nav ----------
+  const toggle = $('#navToggle'), nav = $('#mainnav');
   toggle.addEventListener('click', () => {
     const open = nav.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open);
+    toggle.textContent = open ? 'Close' : 'Menu';
   });
-  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  $$('a', nav).forEach(a => a.addEventListener('click', () => {
     nav.classList.remove('open');
     toggle.setAttribute('aria-expanded', false);
+    toggle.textContent = 'Menu';
   }));
 
-  // Project photo carousels
-  document.querySelectorAll('.car-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const track = document.getElementById(btn.dataset.target);
-      const item = track.querySelector('.carousel-item');
-      if (!item) return;
-      const amount = item.getBoundingClientRect().width + 10;
-      track.scrollBy({ left: btn.classList.contains('next') ? amount : -amount, behavior: 'smooth' });
+  // ---------- Header shadow ----------
+  const header = $('header');
+  const onScroll = () => header.classList.toggle('scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // ---------- Active nav link ----------
+  const links = new Map($$('a', nav).map(a => [a.getAttribute('href').slice(1), a]));
+  const spy = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      links.forEach(a => a.classList.remove('active'));
+      links.get(e.target.id)?.classList.add('active');
     });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  links.forEach((_, id) => { const el = document.getElementById(id); if (el) spy.observe(el); });
+
+  // ---------- Reveal on scroll ----------
+  const reveal = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  $$('.reveal').forEach(el => reveal.observe(el));
+
+  // ---------- Image tiles: blurred backdrop + fade-in ----------
+  $$('.shot').forEach(shot => {
+    const img = $('img', shot);
+    shot.style.setProperty('--img', `url("${img.getAttribute('src')}")`);
+    shot.setAttribute('aria-label', `Enlarge photo: ${img.alt}`);
+    const done = () => img.classList.add('loaded');
+    if (img.complete && img.naturalWidth) done();
+    else { img.addEventListener('load', done); img.addEventListener('error', () => { shot.closest('.carousel-item, .cert-card')?.remove(); }); }
   });
+
+  // ---------- Carousels: arrows + dots ----------
+  $$('.project-carousel').forEach(track => {
+    const wrap = track.parentElement;
+    const items = $$('.carousel-item', track);
+    const mk = (cls, label, path) => {
+      const b = document.createElement('button');
+      b.className = `car-btn ${cls}`; b.setAttribute('aria-label', label);
+      b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
+      wrap.appendChild(b); return b;
+    };
+    const prev = mk('prev', 'Previous photos', 'm15 6-6 6 6 6');
+    const next = mk('next', 'Next photos', 'm9 6 6 6-6 6');
+    const step = () => items[0].getBoundingClientRect().width + 12;
+    prev.addEventListener('click', () => track.scrollBy({ left: -step() }));
+    next.addEventListener('click', () => track.scrollBy({ left: step() }));
+
+    const dots = document.createElement('div');
+    dots.className = 'car-dots';
+    wrap.appendChild(dots);
+    let pages = 0;
+    const build = () => {
+      const visible = Math.max(1, Math.round(track.clientWidth / step()));
+      const n = Math.max(1, items.length - visible + 1);
+      if (n === pages) return;
+      pages = n; dots.innerHTML = '';
+      dots.style.display = n > 1 ? '' : 'none';
+      for (let i = 0; i < n; i++) {
+        const d = document.createElement('button');
+        d.setAttribute('aria-label', `Go to photo ${i + 1}`);
+        d.addEventListener('click', () => track.scrollTo({ left: i * step() }));
+        dots.appendChild(d);
+      }
+    };
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max;
+      const idx = Math.min(pages - 1, Math.round(track.scrollLeft / step()));
+      $$('button', dots).forEach((d, i) => d.classList.toggle('on', i === idx));
+    };
+    build(); update();
+    track.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    addEventListener('resize', () => { build(); update(); });
+  });
+
+  // ---------- Lightbox ----------
+  const lb = $('#lightbox'), lbImg = $('#lbImg'), lbStage = $('#lbStage');
+  const lbCap = $('#lbCap'), lbCount = $('#lbCount'), lbTitle = $('#lbTitle');
+  const lbPrev = $('#lbPrev'), lbNext = $('#lbNext'), lbClose = $('#lbClose');
+  let group = [], index = 0, title = '', lastFocus = null;
+
+  const preload = i => { if (group[i]) { const im = new Image(); im.src = group[i].dataset.full; } };
+  const show = i => {
+    index = (i + group.length) % group.length;
+    const shot = group[index], alt = $('img', shot).alt;
+    lbStage.classList.add('loading');
+    lbImg.classList.add('swap');
+    const src = shot.dataset.full;
+    const im = new Image();
+    im.onload = im.onerror = () => {
+      setTimeout(() => {
+        lbImg.src = src; lbImg.alt = alt;
+        lbStage.classList.remove('loading');
+        requestAnimationFrame(() => lbImg.classList.remove('swap'));
+      }, reduceMotion ? 0 : 120);
+    };
+    im.src = src;
+    lbCap.textContent = alt;
+    lbCount.textContent = `${index + 1} / ${group.length}`;
+    lbTitle.textContent = title;
+    const multi = group.length > 1;
+    lbPrev.disabled = lbNext.disabled = !multi;
+    preload(index + 1); preload(index - 1);
+  };
+  const open = shot => {
+    const container = shot.closest('[data-title]');
+    group = $$('.shot', container);
+    title = container.dataset.title;
+    lastFocus = document.activeElement;
+    lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lb-open');
+    show(group.indexOf(shot));
+    lbClose.focus();
+  };
+  const close = () => {
+    lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lb-open');
+    lastFocus?.focus();
+  };
+
+  $$('.shot').forEach(s => s.addEventListener('click', () => open(s)));
+  lbPrev.addEventListener('click', () => show(index - 1));
+  lbNext.addEventListener('click', () => show(index + 1));
+  lbClose.addEventListener('click', close);
+  lb.addEventListener('click', e => { if (e.target === lb || e.target === lbStage) close(); });
+  addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight') show(index + 1);
+    else if (e.key === 'ArrowLeft') show(index - 1);
+    else if (e.key === 'Tab') {
+      const f = $$('button:not([disabled])', lb).filter(b => b.offsetParent !== null);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  // Swipe on touch screens
+  let x0 = null;
+  lbStage.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  lbStage.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 45) show(index + (dx < 0 ? 1 : -1));
+  });
+})();
 </script>
 
 </body>

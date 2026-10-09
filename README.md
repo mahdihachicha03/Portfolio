@@ -1,6 +1,6 @@
 # Mahdi Hachicha — Portfolio
 
-A single-page portfolio site (`index.html`, no build step, no dependencies besides a Google Fonts link) styled like a PCB schematic sheet — dark board-green background, copper accents, a "bill of materials" skills table, and projects laid out as numbered schematic sheets.
+A single-page portfolio site (`index.html`, no build step, no dependencies besides a Google Fonts link) with a clean navy/steel engineering style — a "bill of materials" skills table, projects laid out as numbered sheets with photo carousels, a certificate grid, and a full-screen image viewer (click any photo; arrow keys / swipe to browse, Esc to close).
 
 ## Publish it on GitHub Pages (free, ~5 minutes)
 
@@ -25,3 +25,13 @@ The "Download CV" button in the hero links to `resume.pdf`. Export your CV (the 
 ## Editing content later
 
 Everything is in the one `index.html` file — no templating, no build tools. Search for the section you want to change (`<!-- PROJECTS -->`, `<!-- SKILLS -->`, etc.) and edit the text directly. Re-upload the file to GitHub (or `git push` if you're using the command line) and the live site updates automatically within a minute.
+
+## Adding photos
+
+Each photo exists in two sizes:
+
+- `images/projects/<name>.jpg` — the large version shown in the full-screen viewer (keep it ≤ 1800px on the long side).
+- `images/projects/thumbs/<name>.jpg` — a ~720px copy shown in the page itself, so it loads fast.
+
+Certificates work the same way under `images/certificates/` and `images/certificates/thumbs/`.
+In `index.html`, the `alt` text of each image doubles as its caption in the viewer.
